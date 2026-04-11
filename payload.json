@@ -1,0 +1,15 @@
+{
+  "contents": [
+    {
+      "parts": [
+        {
+          "text": "Create a detailed day-by-day travel itinerary for a trip to bengaluru for 5 days.\nThe traveler is starting from hyderabad.\nThe traveler's budget is ₹7500 INR.\nTheir interests include Nature, Food, Adventure, Nightlife.\nThey are traveling solo.\nTravel starts on 2026-04-30.\n\nYou MUST respond with ONLY valid JSON, no markdown, no code fences. Use this exact structure:\n{\n  \"destination\": \"bengaluru\",\n  \"summary\": \"A brief 1-2 sentence summary of the trip\",\n  \"estimated_total\": \"₹XXXXX\",\n  \"budget_breakdown\": {\n    \"accommodation\": \"₹XXXXX\",\n    \"food\": \"₹XXXXX\",\n    \"transport\": \"₹XXXXX\",\n    \"activities\": \"₹XXXXX\"\n  },\n  \"days\": [\n    {\n      \"day\": 1,\n      \"title\": \"Theme of the day\",\n      \"weather\": {\n        \"temperature\": \"XX°C\",\n        \"condition\": \"Sunny/Cloudy/Rainy/etc\",\n        \"icon\": \"☀️/⛅/🌧️/etc\"\n      },\n      \"activities\": [\n        {\n          \"time\": \"10:00 AM\",\n          \"title\": \"Activity name\",\n          \"description\": \"Brief description\",\n          \"cost\": \"₹XXX or Free\",\n          \"type\": \"attraction\"\n        }\n      ]\n    }\n  ]\n}\n\nImportant rules:\n- All costs must be in Indian Rupees (₹)\n- Include 4-6 activities per day (type can be \"attraction\", \"food\", \"transport\", or \"hotel\")\n- Each day should have a hotel check-in as the last activity (except the last day)\n- ONLY return valid JSON (do not include ```json blocks at the beginning or end)."
+        }
+      ]
+    }
+  ],
+  "generationConfig": {
+    "temperature": 0.7,
+    "responseMimeType": "application/json"
+  }
+}
