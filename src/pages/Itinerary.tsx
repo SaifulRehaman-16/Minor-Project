@@ -65,6 +65,14 @@ const Itinerary = () => {
   const [activeDayIndex, setActiveDayIndex] = useState(0);
   const [weatherLoading, setWeatherLoading] = useState(false);
 
+  // Fail-safe: If someone visits /itinerary directly without a state, send them home
+  useEffect(() => {
+    if (!itinerary && !location.state?.itinerary) {
+      console.log("No itinerary data found, redirecting home...");
+      navigate("/", { replace: true });
+    }
+  }, [itinerary, navigate, location.state]);
+
   // Real-time weather integration
   useEffect(() => {
     const getLiveWeather = async () => {
