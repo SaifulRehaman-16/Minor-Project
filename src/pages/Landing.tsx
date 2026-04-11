@@ -6,14 +6,15 @@ import HeroSlider from "@/components/landing/HeroSlider";
 import NamasteGreeting from "@/components/landing/NamasteGreeting";
 import TrendingTrips from "@/components/landing/TrendingTrips";
 import { Button } from "@/components/ui/button";
+import { useTranslation } from "react-i18next";
 
 const features = [
-  { icon: Sparkles, title: "AI-Powered Plans", desc: "Get personalized day-by-day itineraries crafted by advanced AI." },
-  { icon: MapPin, title: "Smart Destinations", desc: "Discover hidden gems and popular spots tailored to your taste." },
-  { icon: Calendar, title: "Flexible Scheduling", desc: "Adjust dates and plans on the fly with real-time updates." },
-  { icon: Wallet, title: "Budget Tracking", desc: "Stay within budget with cost estimates for every activity." },
-  { icon: Users, title: "Group Planning", desc: "Plan for solo trips, couples, families, or friend groups." },
-  { icon: Star, title: "Save & Share", desc: "Save itineraries and share them with your travel companions." },
+  { icon: Sparkles, titleKey: "features.f1_title", descKey: "features.f1_desc" },
+  { icon: MapPin, titleKey: "features.f2_title", descKey: "features.f2_desc" },
+  { icon: Calendar, titleKey: "features.f3_title", descKey: "features.f3_desc" },
+  { icon: Wallet, titleKey: "features.f4_title", descKey: "features.f4_desc" },
+  { icon: Users, titleKey: "features.f5_title", descKey: "features.f5_desc" },
+  { icon: Star, titleKey: "features.f6_title", descKey: "features.f6_desc" },
 ];
 
 
@@ -24,6 +25,7 @@ const fade = {
 };
 
 const Landing = () => {
+  const { t } = useTranslation();
   const { user } = useAuth();
   
   return (
@@ -44,15 +46,15 @@ const Landing = () => {
         
         <div className="container mx-auto px-6 relative z-10">
           <motion.div initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-100px" }} className="mb-14 text-center">
-            <motion.span variants={fade} custom={0} className="mb-2 inline-block text-sm font-semibold uppercase tracking-widest text-primary">Why Explorer Mind</motion.span>
+            <motion.span variants={fade} custom={0} className="mb-2 inline-block text-sm font-semibold uppercase tracking-widest text-primary">{t('hero.why_explorer')}</motion.span>
             <motion.h2 variants={fade} custom={1} className="font-display text-4xl font-black text-foreground md:text-6xl">
-              Travel <span className="text-gradient">Smarter</span>, Not Harder
+              {t('hero.features_title', { 0: <span className="text-gradient" key="span">{t('hero.features_smart')}</span> })}
             </motion.h2>
           </motion.div>
           <motion.div initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-50px" }} className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
             {features.map((f, i) => (
               <motion.div 
-                key={f.title} 
+                key={f.titleKey} 
                 variants={fade} 
                 custom={i} 
                 className="glass-panel p-10 group transition-all duration-500 hover:-translate-y-3 hover:shadow-glow relative overflow-hidden bg-white/5 border-white/10 h-full flex flex-col items-center text-center"
@@ -62,8 +64,8 @@ const Landing = () => {
                   <div className="mb-8 flex h-20 w-20 items-center justify-center rounded-3xl bg-primary/10 transition-all duration-500 group-hover:bg-primary group-hover:rotate-12 group-hover:scale-110 shadow-soft">
                     <f.icon className="h-10 w-10 text-primary transition-colors group-hover:text-primary-foreground" />
                   </div>
-                  <h3 className="mb-4 font-display text-2xl font-bold text-foreground group-hover:text-primary transition-colors">{f.title}</h3>
-                  <p className="text-sm leading-relaxed text-muted-foreground font-medium">{f.desc}</p>
+                  <h3 className="mb-4 font-display text-2xl font-bold text-foreground group-hover:text-primary transition-colors">{t(f.titleKey)}</h3>
+                  <p className="text-sm leading-relaxed text-muted-foreground font-medium">{t(f.descKey)}</p>
                 </div>
               </motion.div>
             ))}
@@ -76,14 +78,14 @@ const Landing = () => {
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[1000px] h-[600px] bg-secondary/5 rounded-full blur-[150px] -z-10 pointer-events-none" />
         <div className="container mx-auto px-6">
           <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} className="mb-14 text-center">
-            <motion.span variants={fade} custom={0} className="mb-2 inline-block text-sm font-semibold uppercase tracking-widest text-primary">Simple Process</motion.span>
-            <motion.h2 variants={fade} custom={1} className="font-display text-4xl font-black text-foreground md:text-6xl">Plan in <span className="text-gradient">3 Easy Steps</span></motion.h2>
+            <motion.span variants={fade} custom={0} className="mb-2 inline-block text-sm font-semibold uppercase tracking-widest text-primary">{t('steps.process')}</motion.span>
+            <motion.h2 variants={fade} custom={1} className="font-display text-4xl font-black text-foreground md:text-6xl">{t('hero.steps_title', { 0: <span className="text-gradient" key="span">{t('hero.steps_easy')}</span> })}</motion.h2>
           </motion.div>
           <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} className="grid gap-12 md:grid-cols-3">
             {[
-              { step: "01", title: "Enter Preferences", desc: "Select your destination, dates, budget, and travel interests." },
-              { step: "02", title: "AI Generation", desc: "Our advanced algorithms craft your perfect personalized roadmap." },
-              { step: "03", title: "Review & Explore", desc: "Fine-tune your itinerary and set off on your dream adventure." },
+              { step: "01", titleKey: "steps.s1_title", descKey: "steps.s1_desc" },
+              { step: "02", titleKey: "steps.s2_title", descKey: "steps.s2_desc" },
+              { step: "03", titleKey: "steps.s3_title", descKey: "steps.s3_desc" },
             ].map((s, i) => (
               <motion.div 
                 key={s.step} 
@@ -94,8 +96,8 @@ const Landing = () => {
                 <div className="mx-auto mb-10 flex h-24 w-24 items-center justify-center rounded-[2.5rem] bg-white/5 border border-white/10 font-display text-4xl font-black text-primary/40 transition-all duration-700 group-hover:bg-primary group-hover:text-primary-foreground group-hover:rotate-[360deg] shadow-elevated">
                   {s.step}
                 </div>
-                <h3 className="mb-4 font-display text-2xl font-bold text-foreground group-hover:text-primary transition-colors">{s.title}</h3>
-                <p className="text-sm text-muted-foreground leading-relaxed font-medium mx-auto max-w-xs">{s.desc}</p>
+                <h3 className="mb-4 font-display text-2xl font-bold text-foreground group-hover:text-primary transition-colors">{t(s.titleKey)}</h3>
+                <p className="text-sm text-muted-foreground leading-relaxed font-medium mx-auto max-w-xs">{t(s.descKey)}</p>
                 {i < 2 && (
                   <div className="hidden lg:block absolute top-1/2 -right-6 w-12 h-px bg-white/10" />
                 )}
@@ -124,14 +126,14 @@ const Landing = () => {
             <div className="relative z-10 max-w-4xl mx-auto">
               <Sparkles className="h-14 w-14 text-white/20 mx-auto mb-8 animate-pulse" />
               <h2 className="mb-6 font-display text-4xl font-black text-white md:text-7xl tracking-tighter">
-                Ready to <span className="text-gradient">Explore</span> Modernity?
+                {t('hero.footer_title', { 0: <span className="text-gradient" key="span">{t('hero.footer_explore')}</span> })}
               </h2>
               <p className="mx-auto mb-12 max-w-xl text-xl text-white/60 font-medium">
-                The world's most intelligent trip architect is at your service. Craft your legacy of travel in minutes.
+                {t('hero.footer_desc')}
               </p>
               <Link to="/planner">
                 <Button size="lg" className="btn-hero h-16 px-10 rounded-2xl text-lg font-bold group shadow-glow">
-                  Start Planning Now <ArrowRight className="ml-3 h-6 w-6 group-hover:translate-x-2 transition-transform" />
+                  {t('hero.cta')} <ArrowRight className="ml-3 h-6 w-6 group-hover:translate-x-2 transition-transform" />
                 </Button>
               </Link>
             </div>

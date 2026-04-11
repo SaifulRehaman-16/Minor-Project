@@ -3,6 +3,7 @@ import { motion, useScroll, useTransform } from "framer-motion";
 import { Sparkles, ArrowUpRight, MapPin, ChevronLeft, ChevronRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 
 const trendingDestinations = [
   {
@@ -67,6 +68,7 @@ import { useNavigate } from "react-router-dom";
 import SafeImage from "@/components/ui/SafeImage";
 
 const TrendingTrips = () => {
+  const { t } = useTranslation();
   const scrollRef = useRef<HTMLDivElement>(null);
   const navigate = useNavigate();
 
@@ -99,9 +101,9 @@ const TrendingTrips = () => {
             viewport={{ once: true }}
             className="space-y-2"
           >
-            <span className="text-secondary font-bold uppercase tracking-[0.2em] text-xs">Explore Trends</span>
+            <span className="text-secondary font-bold uppercase tracking-[0.2em] text-xs">{t('trending.explore')}</span>
             <h2 className="text-4xl md:text-5xl font-black text-foreground">
-              Trending <span className="text-gradient">Destinations</span>
+              {t('trending.title')}
             </h2>
           </motion.div>
 
@@ -126,7 +128,7 @@ const TrendingTrips = () => {
             </div>
             <Link to="/planner" className="hidden md:block">
               <Button className="btn-hero h-12 px-6 rounded-full group">
-                Plan Yours <ArrowUpRight className="ml-2 h-4 w-4" />
+                {t('trending.plan_yours')} <ArrowUpRight className="ml-2 h-4 w-4" />
               </Button>
             </Link>
           </div>
@@ -178,7 +180,7 @@ const TrendingTrips = () => {
                         </div>
                       ))}
                     </div>
-                    <span className="text-[10px] text-white/60 font-black uppercase tracking-wider">Top Rated</span>
+                    <span className="text-[10px] text-white/60 font-black uppercase tracking-wider">{t('trending.top_rated')}</span>
                   </div>
                   <Button variant="ghost" size="icon" className="h-10 w-10 rounded-full bg-white/10 text-white hover:bg-primary hover:text-white transition-all">
                     <ArrowUpRight className="h-5 w-5" />
@@ -202,8 +204,8 @@ const TrendingTrips = () => {
               <ChevronRight className="h-10 w-10 text-primary group-hover:text-white" />
             </div>
             <div className="text-center">
-              <h3 className="text-2xl font-bold text-foreground">Show All</h3>
-              <p className="text-xs text-muted-foreground font-medium mt-1">Explore AI Recommendations</p>
+              <h3 className="text-2xl font-bold text-foreground">{t('trending.show_all')}</h3>
+              <p className="text-xs text-muted-foreground font-medium mt-1">{t('trending.explore_ai')}</p>
             </div>
           </motion.div>
 
@@ -222,7 +224,7 @@ const TrendingTrips = () => {
               onClick={() => scroll('right')}
               className="rounded-full border-white/10 bg-white/5 backdrop-blur-md hover:bg-primary/20 hover:border-primary/30 h-14 px-8 group transition-all duration-500"
             >
-              <span className="text-xs font-black uppercase tracking-[0.3em] mr-4">Scroll to discover</span>
+              <span className="text-xs font-black uppercase tracking-[0.3em] mr-4">{t('trending.scroll')}</span>
               <div className="flex items-center justify-center h-8 w-8 rounded-full bg-primary/20 group-hover:bg-primary group-hover:scale-110 transition-all duration-500">
                 <ChevronRight className="h-5 w-5 text-primary group-hover:text-white group-hover:translate-x-0.5 transition-all" />
               </div>

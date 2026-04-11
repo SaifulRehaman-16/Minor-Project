@@ -3,6 +3,7 @@ import { Plus, Map as MapIcon, Check } from "lucide-react";
 import WeatherBadge from "./WeatherBadge";
 import ActivityCard from "./ActivityCard";
 import { Button } from "@/components/ui/button";
+import { useTranslation } from "react-i18next";
 
 interface Activity {
   time: string;
@@ -50,6 +51,7 @@ const DaySection = ({
   onDeleteActivity, 
   onAddActivity 
 }: DaySectionProps) => {
+  const { t } = useTranslation();
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
@@ -61,7 +63,7 @@ const DaySection = ({
           {day.day}
         </div>
         <div className="flex-1 min-w-0">
-          <h2 className="font-display text-lg sm:text-xl font-semibold text-foreground">Day {day.day}</h2>
+          <h2 className="font-display text-lg sm:text-xl font-semibold text-foreground">{t('day_section.day')} {day.day}</h2>
           {day.title && <p className="text-xs sm:text-sm text-muted-foreground truncate">{day.title}</p>}
         </div>
         
@@ -74,7 +76,7 @@ const DaySection = ({
               className={`h-8 rounded-lg px-2 text-[10px] uppercase font-bold tracking-widest transition-all ${isViewingOnMap ? 'bg-primary/20 text-primary border-primary/30' : 'bg-white/5 border-white/10 text-muted-foreground'}`}
             >
               {isViewingOnMap ? <Check className="h-3 w-3 mr-1" /> : <MapIcon className="h-3 w-3 mr-1" />}
-              {isViewingOnMap ? "Viewing" : "Map"}
+              {isViewingOnMap ? t('day_section.viewing') : t('day_section.map')}
             </Button>
           )}
           {day.weather && <WeatherBadge weather={day.weather} />}
@@ -104,7 +106,7 @@ const DaySection = ({
             onClick={onAddActivity}
             className="inline-flex w-full items-center justify-center gap-2 rounded-xl border-2 border-dashed border-border py-2.5 sm:py-3 text-xs sm:text-sm font-medium text-muted-foreground transition-all hover:border-primary/50 hover:text-primary hover:bg-primary/5 group"
           >
-            <Plus className="h-3.5 w-3.5 sm:h-4 sm:w-4 transition-transform group-hover:rotate-90" /> Add Activity
+            <Plus className="h-3.5 w-3.5 sm:h-4 sm:w-4 transition-transform group-hover:rotate-90" /> {t('day_section.add_activity')}
           </button>
         )}
       </div>

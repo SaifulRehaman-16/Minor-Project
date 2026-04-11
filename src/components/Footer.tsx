@@ -1,7 +1,10 @@
-import { Plane, Twitter, Instagram, Github } from "lucide-react";
 import { Link } from "react-router-dom";
+import { useTranslation } from "react-i18next";
+import { Plane, Twitter, Instagram, Github } from "lucide-react";
 
-const Footer = () => (
+const Footer = () => {
+  const { t } = useTranslation();
+  return (
   <footer className="relative z-20 border-t border-border bg-card/95 backdrop-blur-md">
     <div className="container mx-auto px-4 py-12">
       <div className="grid gap-8 md:grid-cols-4">
@@ -15,7 +18,7 @@ const Footer = () => (
             </span>
           </Link>
           <p className="text-sm text-muted-foreground leading-relaxed mb-6">
-            Your AI-powered travel companion. Plan smarter, travel better.
+            {t('footer.tagline')}
           </p>
           <div className="flex gap-4">
             <a href="#" className="text-muted-foreground hover:text-primary transition-colors">
@@ -30,9 +33,9 @@ const Footer = () => (
           </div>
         </div>
         {[
-          { title: "Product", links: ["Features", "Pricing", "How it Works"] },
-          { title: "Company", links: ["About", "Blog", "Careers"] },
-          { title: "Support", links: ["Help Center", "Contact", "Privacy"] },
+          { title: t('footer.col_product'), links: [t('footer.link_features'), t('footer.link_pricing'), t('footer.link_how')] },
+          { title: t('footer.col_company'), links: [t('footer.link_about'), t('footer.link_blog'), t('footer.link_careers')] },
+          { title: t('footer.col_support'), links: [t('footer.link_help'), t('footer.link_contact'), t('footer.link_privacy')] },
         ].map((col) => (
           <div key={col.title}>
             <h4 className="mb-3 font-display text-sm font-semibold text-foreground">{col.title}</h4>
@@ -49,10 +52,11 @@ const Footer = () => (
         ))}
       </div>
       <div className="mt-10 border-t border-border pt-6 text-center text-xs text-muted-foreground">
-        © {new Date().getFullYear()} Travel Planner. All rights reserved.
+        © {new Date().getFullYear()} Travel Planner. {t('footer.rights')}
       </div>
     </div>
   </footer>
-);
+  );
+};
 
 export default Footer;

@@ -12,6 +12,7 @@ import { Button } from "@/components/ui/button";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
 import { toast } from "@/hooks/use-toast";
+import { useTranslation } from "react-i18next";
 import LocationAutocomplete from "@/components/LocationAutocomplete";
 import { generateTravelItinerary } from "@/lib/ai";
 
@@ -26,6 +27,7 @@ const companions = [
 const MIN_BUDGET_PER_PERSON_PER_DAY = 1500;
 
 const Planner = () => {
+  const { t, i18n } = useTranslation();
   const navigate = useNavigate();
   const location = useLocation();
   const { user } = useAuth();
@@ -156,36 +158,31 @@ const Planner = () => {
       const apiKey = import.meta.env.VITE_GROQ_API_KEY;
       if (!apiKey) throw new Error("Groq API Key not found. Please add VITE_GROQ_API_KEY to your .env file.");
 
-      const prompt = `CRITICAL: You are an expert travel assistant. You MUST provide a jam-packed itinerary with 8-10 activities EVERY SINGLE DAY. 
-Failure to provide at least 8 activities per day will result in a system error. 
-Each day must include: Breakfast, Morning Sightseeing, Lunch, Afternoon Activity, Evening Relaxation, Dinner, and Nightlife/Rest.
-
-Create a detailed day-by-day travel itinerary for a trip to ${form.destination} for ${form.days} days.
-Traveler starting from: ${form.startPlace || "Home"}
-Budget: ₹${form.budget}
-Interests: ${form.interests?.join(", ") || "Everything"}
-Companions: ${form.companion}
+      const prompt = `Create a detailed travel itinerary for ${form.days} days in ${form.destination}. 
+Starting from ${form.startPlace || "Home"}. Budget: ₹${form.budget}. 
+Interests: ${form.interests && form.interests.length > 0 ? form.interests.join(", ") : "general sightseeing"}.
+Language: ${i18n.language === 'en' ? 'English' : 'Hindi'}.
 
 Respond ONLY with valid raw JSON following this exact structure (note the multiple activities):
 {
-  "trip_title": "string",
-  "destination": "string",
-  "summary": "overview",
+  "trip_title": "String",
+  "destination": "${form.destination}",
+  "summary": "1-2 sentence overview in ${i18n.language === 'en' ? 'English' : 'Hindi'}",
   "estimated_total": "₹XXXXX",
   "budget_breakdown": { "stay": "₹XXXXX", "food": "₹XXXXX", "transport": "₹XXXXX", "activities": "₹XXXXX" },
-  "days": [
-    {
-      "day": 1,
-      "title": "Theme",
-      "weather": { "temperature": "XX°C", "condition": "Sunny", "icon": "☀️" },
-      "activities": [
+  "days": [ 
+    { 
+      "day": 1, 
+      "title": "Day Theme", 
+      "weather": { "temperature": "XX°C", "condition": "Sunny", "icon": "☀️" }, 
+      "activities": [ 
         { "time": "08:00 AM", "title": "Breakfast at X", "description": "...", "cost": "₹XXX", "type": "food", "lat": 0, "lng": 0 },
         { "time": "10:00 AM", "title": "Visit Y", "description": "...", "cost": "₹XXX", "type": "attraction", "lat": 0, "lng": 0 }
-      ]
-    }
+      ] 
+    } 
   ]
 }
-Do not include any markdown formatting. PROVIDE 8-10 ACTIVITIES PER DAY. PROVIDE REAL COORDINATES.`;
+Ensure all descriptions and titles are in ${i18n.language === 'en' ? 'English' : 'Hindi'}. Do not include markdown. PROVIDE 8-10 ACTIVITIES PER DAY. PROVIDE REAL COORDINATES.`;
 
       const data = await generateTravelItinerary(apiKey, prompt);
 
@@ -300,7 +297,7 @@ Do not include any markdown formatting. PROVIDE 8-10 ACTIVITIES PER DAY. PROVIDE
                 </div>
                 <div className="relative max-w-sm mx-auto md:ml-auto">
                   <LocationAutocomplete
-                    placeholder="Where to?"
+                    placeholder={t('planner.destination_placeholder')}
                     value={form.destination}
                     onChange={(v) => setForm({ ...form, destination: v })}
                     showIcon={false}
@@ -330,7 +327,7 @@ Do not include any markdown formatting. PROVIDE 8-10 ACTIVITIES PER DAY. PROVIDE
                 </button>
                 <div className="flex-1 text-center">
                   <span className="text-5xl font-black text-white leading-none block">{form.days}</span>
-                  <span className="text-[12px] uppercase font-bold text-white/60 tracking-widest">Days</span>
+                  <span className="text-[12px] uppercase font-bold text-white/60 tracking-widest">{t('planner.people_label')}</span>
                 </div>
                 <button 
                   onClick={() => setForm(p => ({ ...p, days: Math.min(30, parseInt(p.days) + 1).toString() }))}
@@ -342,12 +339,12 @@ Do not include any markdown formatting. PROVIDE 8-10 ACTIVITIES PER DAY. PROVIDE
             </div>
 
             <div className="space-y-4">
-              <Label className="text-[12px] font-black uppercase text-secondary tracking-[0.2em] block">Departure</Label>
+              <Label className="text-[12px] font-black uppercase text-secondary tracking-[0.2em] block">{t('planner.dates_label')}</Label>
               <Popover open={calendarOpen} onOpenChange={setCalendarOpen}>
                 <PopoverTrigger asChild>
                   <button className="w-full h-16 rounded-[2rem] bg-white/10 border border-white/20 flex items-center px-6 gap-4 hover:bg-white/20 transition-all font-bold text-white">
                     <CalendarIcon className="h-5 w-5 text-secondary" />
-                    {form.startDate ? format(form.startDate, "MMM dd, yyyy") : "Select Date"}
+                    {form.startDate ? format(form.startDate, "MMM dd, yyyy") : t('planner.dates_placeholder')}
                     <ChevronRight className="ml-auto h-4 w-4 opacity-50" />
                   </button>
                 </PopoverTrigger>
@@ -374,7 +371,7 @@ Do not include any markdown formatting. PROVIDE 8-10 ACTIVITIES PER DAY. PROVIDE
             className="lg:col-span-5 glass-panel-heavy p-8 flex flex-col gap-8 border-white/10 bg-black/40 backdrop-blur-3xl"
           >
             <div className="space-y-4">
-              <Label className="text-[12px] font-black uppercase text-primary tracking-[0.2em] block">Traveling Manifest</Label>
+              <Label className="text-[12px] font-black uppercase text-primary tracking-[0.2em] block">{t('planner.companion_label')}</Label>
               <div className="grid grid-cols-4 gap-3">
                 {companions.map((c) => (
                   <button
@@ -405,7 +402,7 @@ Do not include any markdown formatting. PROVIDE 8-10 ACTIVITIES PER DAY. PROVIDE
                 </button>
                 <div className="flex-1 text-center">
                   <span className="text-5xl font-black text-white leading-none block">{form.people}</span>
-                  <span className="text-[12px] uppercase font-bold text-white/60 tracking-widest">Travelers</span>
+                  <span className="text-[12px] uppercase font-bold text-white/60 tracking-widest">{t('planner.people_label')}</span>
                 </div>
                 <button 
                   onClick={() => setForm(p => ({ ...p, people: Math.min(20, parseInt(p.people) + 1).toString() }))}
@@ -502,7 +499,7 @@ Do not include any markdown formatting. PROVIDE 8-10 ACTIVITIES PER DAY. PROVIDE
               <div className="flex-1 w-full space-y-4">
                 <div className="flex items-center gap-3 mb-2">
                   <Wallet className="h-5 w-5 text-primary" />
-                  <Label className="text-[12px] font-black uppercase text-primary tracking-[0.2em]">Mission Budget (₹)</Label>
+                  <Label className="text-[12px] font-black uppercase text-primary tracking-[0.2em]">{t('planner.budget_label')}</Label>
                 </div>
                 <div className="flex items-baseline gap-2">
                   <span className="text-7xl font-black text-white tracking-tighter drop-shadow-lg">
@@ -552,7 +549,7 @@ Do not include any markdown formatting. PROVIDE 8-10 ACTIVITIES PER DAY. PROVIDE
                 </>
               ) : (
                 <>
-                  <span>GENERATE PLAN</span>
+                  <span>{t('planner.generate')}</span>
                 </>
               )}
             </div>
@@ -588,7 +585,7 @@ Do not include any markdown formatting. PROVIDE 8-10 ACTIVITIES PER DAY. PROVIDE
               <div className="space-y-6">
                 <h2 className="text-5xl font-black text-white tracking-widest uppercase mb-2">Generating your plan</h2>
                 <h3 className="text-2xl font-medium text-primary tracking-[0.2em] italic uppercase min-h-[1.5em] transition-all duration-500">
-                  {loadingMessages[loadingMessageIndex]}
+                  {t('planner.loading')}
                 </h3>
                 <div className="flex items-center justify-center gap-1">
                   {[...Array(5)].map((_, i) => (

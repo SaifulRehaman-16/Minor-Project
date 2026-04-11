@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
 import { toast } from "@/hooks/use-toast";
+import { useTranslation } from "react-i18next";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import DaySection from "@/components/itinerary/DaySection";
 import ReviewSection from "@/components/itinerary/ReviewSection";
@@ -53,6 +54,7 @@ interface ItineraryData {
 }
 
 const Itinerary = () => {
+  const { t, i18n } = useTranslation();
   const location = useLocation();
   const navigate = useNavigate();
   const { user } = useAuth();
@@ -207,12 +209,13 @@ Each day must include: Breakfast, Morning Sightseeing, Lunch, Afternoon Activity
 Create a detailed day-by-day travel itinerary for a trip to ${form.destination} for ${form.days} days.
 Starting from ${form.startPlace || "Home"}. Budget: ₹${form.budget}. 
 Interests: ${form.interests && form.interests.length > 0 ? form.interests.join(", ") : "general sightseeing"}.
+Language: ${i18n.language === 'en' ? 'English' : 'Hindi'}.
 
 Respond ONLY with valid raw JSON following this exact structure (note the multiple activities):
 {
   "trip_title": "String",
   "destination": "${form.destination}",
-  "summary": "1-2 sentence overview",
+  "summary": "1-2 sentence overview in ${i18n.language === 'en' ? 'English' : 'Hindi'}",
   "estimated_total": "₹XXXXX",
   "budget_breakdown": { "stay": "₹XXXXX", "food": "₹XXXXX", "transport": "₹XXXXX", "activities": "₹XXXXX" },
   "days": [ 
@@ -227,7 +230,7 @@ Respond ONLY with valid raw JSON following this exact structure (note the multip
     } 
   ]
 }
-Do not include markdown. PROVIDE 8-10 ACTIVITIES PER DAY. PROVIDE REAL COORDINATES.`;
+Ensure all descriptions and titles are in ${i18n.language === 'en' ? 'English' : 'Hindi'}. Do not include markdown. PROVIDE 8-10 ACTIVITIES PER DAY. PROVIDE REAL COORDINATES.`;
 
       const data = await generateTravelItinerary(apiKey, prompt);
       if (!data) throw new Error("Neural generation failed.");
@@ -248,7 +251,7 @@ Do not include markdown. PROVIDE 8-10 ACTIVITIES PER DAY. PROVIDE REAL COORDINAT
     return (
       <div className="flex min-h-screen items-center justify-center bg-background">
         <div className="loader-orbit" />
-        <p className="mt-8 font-display text-sm font-medium animate-pulse text-muted-foreground tracking-widest uppercase">Initializing Neural Architect...</p>
+        <p className="mt-8 font-display text-sm font-medium animate-pulse text-muted-foreground tracking-widest uppercase">{t('itinerary.initializing')}</p>
       </div>
     );
   }
@@ -267,7 +270,7 @@ Do not include markdown. PROVIDE 8-10 ACTIVITIES PER DAY. PROVIDE REAL COORDINAT
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
               <Button variant="ghost" asChild className="w-fit -ml-2 text-muted-foreground hover:text-foreground">
                 <Link to="/planner">
-                  <ArrowLeft className="mr-2 h-4 w-4" /> Back to Planner
+                  <ArrowLeft className="mr-2 h-4 w-4" /> {t('itinerary.back_to_planner')}
                 </Link>
               </Button>
               
@@ -279,14 +282,14 @@ Do not include markdown. PROVIDE 8-10 ACTIVITIES PER DAY. PROVIDE REAL COORDINAT
                   className={`rounded-xl border-white/10 bg-white/5 hover:bg-primary/20 transition-all ${isMapOpen ? 'text-primary border-primary/30 bg-primary/10' : ''}`}
                 >
                   {isMapOpen ? <LayoutList className="h-4 w-4 mr-2" /> : <MapIcon className="h-4 w-4 mr-2" />}
-                  {isMapOpen ? <span className="hidden sm:inline">List View</span> : <span className="hidden sm:inline">Interactive Map</span>}
-                  {!isMapOpen && <span className="sm:hidden text-[10px] uppercase tracking-widest">Map</span>}
+                  {isMapOpen ? <span className="hidden sm:inline">{t('itinerary.list_view')}</span> : <span className="hidden sm:inline">{t('itinerary.interactive_map')}</span>}
+                  {!isMapOpen && <span className="sm:hidden text-[10px] uppercase tracking-widest">{t('itinerary.interactive_map')}</span>}
                 </Button>
 
                 <Popover>
                   <PopoverTrigger asChild>
                     <Button variant="outline" size="sm" className="rounded-xl border-white/10 bg-white/5 hover:bg-white/10">
-                      <Share2 className="h-4 w-4 mr-2" /> <span className="hidden sm:inline">Share</span>
+                      <Share2 className="h-4 w-4 mr-2" /> <span className="hidden sm:inline">{t('itinerary.share')}</span>
                     </Button>
                   </PopoverTrigger>
                   <PopoverContent className="w-80 p-4 card-travel border-white/10" align="end">

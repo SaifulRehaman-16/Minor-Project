@@ -9,8 +9,10 @@ import { Button } from "@/components/ui/button";
 import { useAuth } from "@/hooks/useAuth";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "@/hooks/use-toast";
+import { useTranslation } from "react-i18next";
 
 const Profile = () => {
+  const { t } = useTranslation();
   const { user, loading: authLoading } = useAuth();
   const navigate = useNavigate();
   const [saving, setSaving] = useState(false);
@@ -90,10 +92,10 @@ const Profile = () => {
         data: { full_name: form.display_name.trim() }
       });
 
-      toast({ title: "Profile Updated", description: "Your profile has been saved successfully." });
+      toast({ title: t('profile.success_title'), description: t('profile.success_desc') });
     } catch (error) {
       console.error(error);
-      toast({ title: "Error", description: "Failed to save profile. Please try again.", variant: "destructive" });
+      toast({ title: t('profile.error_title'), description: t('profile.error_desc'), variant: "destructive" });
     } finally {
       setSaving(false);
     }
@@ -115,10 +117,10 @@ const Profile = () => {
       <div className="container mx-auto max-w-xl px-4">
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="mb-10 text-center">
           <span className="mb-2 inline-block text-sm font-semibold uppercase tracking-wider text-primary">
-            Your Account
+            {t('profile.account')}
           </span>
           <h1 className="mb-3 font-display text-4xl font-bold text-foreground">
-            Edit Profile
+            {t('profile.edit_title')}
           </h1>
         </motion.div>
 
@@ -154,10 +156,10 @@ const Profile = () => {
           {/* Display Name */}
           <div>
             <Label className="mb-2 flex items-center gap-2 font-body text-sm font-medium text-foreground">
-              <User className="h-4 w-4 text-primary" /> Display Name
+              <User className="h-4 w-4 text-primary" /> {t('profile.display_name')}
             </Label>
             <Input
-              placeholder="Your name"
+              placeholder={t('profile.name_placeholder')}
               value={form.display_name}
               onChange={(e) => setForm({ ...form, display_name: e.target.value })}
               className="bg-background"
@@ -167,7 +169,7 @@ const Profile = () => {
           {/* Email (read-only) */}
           <div>
             <Label className="mb-2 flex items-center gap-2 font-body text-sm font-medium text-foreground">
-              <Mail className="h-4 w-4 text-primary" /> Email
+              <Mail className="h-4 w-4 text-primary" /> {t('profile.email')}
             </Label>
             <Input
               value={user?.email || ""}
@@ -179,10 +181,10 @@ const Profile = () => {
           {/* Phone */}
           <div>
             <Label className="mb-2 flex items-center gap-2 font-body text-sm font-medium text-foreground">
-              <Phone className="h-4 w-4 text-primary" /> Phone
+              <Phone className="h-4 w-4 text-primary" /> {t('profile.phone')}
             </Label>
             <Input
-              placeholder="+91 98765 43210"
+              placeholder={t('profile.phone_placeholder')}
               value={form.phone}
               onChange={(e) => setForm({ ...form, phone: e.target.value })}
               className="bg-background"
@@ -192,10 +194,10 @@ const Profile = () => {
           {/* Bio */}
           <div>
             <Label className="mb-2 flex items-center gap-2 font-body text-sm font-medium text-foreground">
-              <FileText className="h-4 w-4 text-primary" /> Bio
+              <FileText className="h-4 w-4 text-primary" /> {t('profile.bio')}
             </Label>
             <Textarea
-              placeholder="Tell us about yourself and your travel style..."
+              placeholder={t('profile.bio_placeholder')}
               value={form.bio}
               onChange={(e) => setForm({ ...form, bio: e.target.value })}
               className="min-h-[100px] bg-background"
@@ -208,9 +210,9 @@ const Profile = () => {
             className="btn-hero w-full !rounded-xl disabled:opacity-50"
           >
             {saving ? (
-              <><Loader2 className="mr-2 h-5 w-5 animate-spin" /> Saving…</>
+              <><Loader2 className="mr-2 h-5 w-5 animate-spin" /> {t('profile.saving_btn')}</>
             ) : (
-              <><Save className="mr-2 h-5 w-5" /> Save Profile</>
+              <><Save className="mr-2 h-5 w-5" /> {t('profile.save_btn')}</>
             )}
           </Button>
         </motion.form>

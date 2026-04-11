@@ -4,6 +4,7 @@ import { Globe, MapPin, Sparkles, ArrowLeft, ArrowUpRight, ShieldCheck, Trending
 import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/hooks/useAuth";
+import { useTranslation } from "react-i18next";
 import SafeImage from "@/components/ui/SafeImage";
 import { supabase } from "@/integrations/supabase/client";
 
@@ -11,6 +12,7 @@ import { Destination, INDIA_DESTINATIONS, WORLD_DESTINATIONS } from "@/data/dest
 
 
 const Trending = () => {
+  const { t } = useTranslation();
   const [view, setView] = useState<"india" | "world">("india");
   const [visibleCount, setVisibleCount] = useState(8);
   const destinations = view === "india" ? INDIA_DESTINATIONS : WORLD_DESTINATIONS;
@@ -37,13 +39,13 @@ const Trending = () => {
         <div className="flex flex-col md:flex-row items-center justify-between gap-8 mb-16">
           <div className="space-y-4 text-center md:text-left">
             <Link to="/" className="inline-flex items-center gap-2 text-primary font-bold text-sm group">
-              <ArrowLeft className="h-4 w-4 group-hover:-translate-x-1 transition-transform" /> Back to Home
+              <ArrowLeft className="h-4 w-4 group-hover:-translate-x-1 transition-transform" /> {t('trending_page.back')}
             </Link>
             <h1 className="text-5xl md:text-7xl font-display font-black tracking-tighter text-foreground">
-              AI <span className="text-gradient">Recommended</span>
+              {t('trending_page.title_ai')}
             </h1>
             <p className="text-muted-foreground text-lg max-w-xl">
-              Exploring the internet's most trending spots and matching them with your unique Travel DNA.
+              {t('trending_page.subtitle')}
             </p>
           </div>
 
@@ -53,14 +55,14 @@ const Trending = () => {
               className={`px-8 py-3 rounded-xl text-sm font-bold transition-all ${view === "india" ? "bg-primary text-white shadow-glow scale-105" : "text-muted-foreground hover:text-foreground"
                 }`}
             >
-              India
+              {t('trending_page.india')}
             </button>
             <button
               onClick={() => setView("world")}
               className={`px-8 py-3 rounded-xl text-sm font-bold transition-all ${view === "world" ? "bg-primary text-white shadow-glow scale-105" : "text-muted-foreground hover:text-foreground"
                 }`}
             >
-              World
+              {t('trending_page.world')}
             </button>
           </div>
         </div>
@@ -107,7 +109,7 @@ const Trending = () => {
                       <Compass className="h-5 w-5" />
                     </div>
                     <div>
-                      <p className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground">Analysis</p>
+                      <p className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground">{t('trending_page.analysis')}</p>
                       <p className="text-sm font-semibold text-foreground leading-snug">{dest.reason}</p>
                     </div>
                   </div>
@@ -115,7 +117,7 @@ const Trending = () => {
                   <div className="mt-auto pt-6 border-t border-white/5 flex items-center justify-between">
                     <div className="flex items-center gap-2">
                       <TrendingUp className="h-4 w-4 text-green-500" />
-                      <span className="text-xs font-bold text-muted-foreground">High Demand</span>
+                      <span className="text-xs font-bold text-muted-foreground">{t('trending_page.high_demand')}</span>
                     </div>
                     <Button
                       onClick={() => navigate("/planner", { state: { destination: dest.name, interests: [dest.tag] } })}
@@ -138,7 +140,7 @@ const Trending = () => {
                 onClick={handleLoadMore}
                 className="btn-hero h-14 px-10 rounded-2xl text-lg font-bold group shadow-glow"
               >
-                Discover More Favorites <TrendingUp className="ml-2 h-5 w-5 group-hover:scale-110 transition-transform" />
+                {t('trending_page.discover_more')} <TrendingUp className="ml-2 h-5 w-5 group-hover:scale-110 transition-transform" />
               </Button>
             </motion.div>
           ) : (
@@ -149,14 +151,14 @@ const Trending = () => {
             >
               <div className="inline-flex items-center gap-2 rounded-full bg-secondary/10 px-4 py-2 text-xs font-bold text-secondary border border-secondary/20">
                 <Globe className="h-3 w-3" />
-                <span>You've explored all current trends</span>
+                <span>{t('trending_page.all_explored')}</span>
               </div>
-              <h3 className="text-2xl font-bold text-foreground">Want more personalized spots?</h3>
+              <h3 className="text-2xl font-bold text-foreground">{t('trending_page.want_more')}</h3>
               <Button
                 onClick={() => navigate("/planner")}
                 className="btn-hero h-16 px-12 rounded-[2rem] text-xl font-black bg-white text-black hover:bg-white/90 border-none shadow-2x-glow"
               >
-                Generate Fresh AI Recommendations <Sparkles className="ml-3 h-6 w-6 text-primary" />
+                {t('trending_page.generate_fresh')} <Sparkles className="ml-3 h-6 w-6 text-primary" />
               </Button>
             </motion.div>
           )}

@@ -6,6 +6,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { useAuth } from "@/hooks/useAuth";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "@/hooks/use-toast";
+import { useTranslation } from "react-i18next";
 
 interface Review {
   id: string;
@@ -59,6 +60,7 @@ const StarRating = ({ rating, onRate, interactive = false, size = "md" }: {
 };
 
 const ReviewSection = ({ itineraryId, destination }: ReviewSectionProps) => {
+  const { t, i18n } = useTranslation();
   const { user } = useAuth();
   const [reviews, setReviews] = useState<Review[]>([]);
   const [loading, setLoading] = useState(true);
@@ -113,7 +115,7 @@ const ReviewSection = ({ itineraryId, destination }: ReviewSectionProps) => {
 
   const handleSubmit = async () => {
     if (!user || !itineraryId || rating === 0) {
-      toast({ title: "Please select a rating", variant: "destructive" });
+      toast({ title: t('reviews.rating_error'), variant: "destructive" });
       return;
     }
 
@@ -130,12 +132,12 @@ const ReviewSection = ({ itineraryId, destination }: ReviewSectionProps) => {
 
       if (error) throw error;
 
-      toast({ title: "Review submitted!", description: "Thanks for your feedback." });
+      toast({ title: t('reviews.success_title'), description: t('reviews.success_desc') });
       setRating(0);
       setComment("");
       fetchReviews();
     } catch (error: any) {
-      toast({ title: "Failed to submit review", description: error.message, variant: "destructive" });
+      toast({ title: t('reviews.error_title'), description: error.message, variant: "destructive" });
     } finally {
       setSubmitting(false);
     }
@@ -151,7 +153,7 @@ const ReviewSection = ({ itineraryId, destination }: ReviewSectionProps) => {
       if (error) throw error;
 
       setReviews((prev) => prev.filter((r) => r.id !== reviewId));
-      toast({ title: "Review deleted" });
+      toast({ title: t('reviews.delete_title') });
     } catch (e) {
       console.error(e);
     }
@@ -164,7 +166,7 @@ const ReviewSection = ({ itineraryId, destination }: ReviewSectionProps) => {
   const userHasReviewed = reviews.some((r) => r.user_id === user?.id);
 
   const formatDate = (dateStr: string) =>
-    new Date(dateStr).toLocaleDateString("en-IN", { month: "short", day: "numeric", year: "numeric" });
+    new Date(dateStr).toLocaleDateString(i18n.language === 'hi' ? 'hi-IN' : "en-IN", { month: "short", day: "numeric", year: "numeric" });
 
   return (
     <motion.div
@@ -180,10 +182,10 @@ const ReviewSection = ({ itineraryId, destination }: ReviewSectionProps) => {
             <MessageSquare className="h-5 w-5 sm:h-6 sm:w-6 text-primary" />
             <div>
               <h3 className="font-display text-lg sm:text-xl font-semibold text-foreground">
-                Reviews & Ratings
+                {t('reviews.title')}
               </h3>
               <p className="text-xs sm:text-sm text-muted-foreground">
-                Share your thoughts on this {destination} itinerary
+                {t('reviews.share_thoughts')} {destination} {t('reviews.itinerary_suffix')}
               </p>
             </div>
           </div>
@@ -192,7 +194,7 @@ const ReviewSection = ({ itineraryId, destination }: ReviewSectionProps) => {
               <span className="text-2xl font-bold text-foreground">{avgRating}</span>
               <div>
                 <StarRating rating={Math.round(Number(avgRating))} size="sm" />
-                <p className="text-xs text-muted-foreground">{reviews.length} review{reviews.length !== 1 ? "s" : ""}</p>
+                <p className="text-xs text-muted-foreground">{reviews.length} {reviews.length !== 1 ? t('reviews.reviews_count_plural') : t('reviews.reviews_count')}</p>
               </div>
             </div>
           )}
@@ -201,10 +203,10 @@ const ReviewSection = ({ itineraryId, destination }: ReviewSectionProps) => {
         {/* Submit form */}
         {user && itineraryId && !userHasReviewed && (
           <div className="mb-6 rounded-xl border border-border bg-muted/30 p-4 sm:p-5">
-            <p className="mb-3 text-sm font-medium text-foreground">Rate this itinerary</p>
+            <p className="mb-3 text-sm font-medium text-foreground">{t('reviews.rating_label')}</p>
             <StarRating rating={rating} onRate={setRating} interactive size="md" />
             <Textarea
-              placeholder="Share your experience or tips for other travelers..."
+              placeholder={t('reviews.placeholder')}
               value={comment}
               onChange={(e) => setComment(e.target.value)}
               className="mt-3 min-h-[80px] bg-background text-sm"
@@ -221,7 +223,7 @@ const ReviewSection = ({ itineraryId, destination }: ReviewSectionProps) => {
                 ) : (
                   <Send className="h-3.5 w-3.5" />
                 )}
-                Submit Review
+                {t('reviews.submit')}
               </Button>
             </div>
           </div>
@@ -229,13 +231,13 @@ const ReviewSection = ({ itineraryId, destination }: ReviewSectionProps) => {
 
         {!user && (
           <div className="mb-6 rounded-xl border border-dashed border-border bg-muted/20 p-4 text-center">
-            <p className="text-sm text-muted-foreground">Sign in to leave a review</p>
+            <p className="text-sm text-muted-foreground">{t('reviews.signin')}</p>
           </div>
         )}
 
         {!itineraryId && (
           <div className="mb-6 rounded-xl border border-dashed border-border bg-muted/20 p-4 text-center">
-            <p className="text-sm text-muted-foreground">Save your itinerary to enable reviews</p>
+            <p className="text-sm text-muted-foreground">{t('reviews.save_to_review')}</p>
           </div>
         )}
 
@@ -247,7 +249,7 @@ const ReviewSection = ({ itineraryId, destination }: ReviewSectionProps) => {
         ) : reviews.length === 0 ? (
           <div className="py-6 text-center">
             <Star className="mx-auto mb-2 h-8 w-8 text-border" />
-            <p className="text-sm text-muted-foreground">No reviews yet. Be the first to share your thoughts!</p>
+            <p className="text-sm text-muted-foreground">{t('reviews.no_reviews')}</p>
           </div>
         ) : (
           <div className="space-y-4">
@@ -276,7 +278,7 @@ const ReviewSection = ({ itineraryId, destination }: ReviewSectionProps) => {
                       )}
                       <div>
                         <p className="text-sm font-medium text-foreground">
-                          {review.profile?.display_name || "Traveler"}
+                          {review.profile?.display_name || t('reviews.traveler')}
                         </p>
                         <div className="flex items-center gap-2">
                           <StarRating rating={review.rating} size="sm" />

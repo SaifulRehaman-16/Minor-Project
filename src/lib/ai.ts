@@ -89,23 +89,24 @@ export const generateTravelItinerary = async (apiKey: string, prompt: string) =>
   throw new Error(lastError.message || "An unexpected error occurred while generating your itinerary with Groq.");
 };
 
-export const generateDestinationDetail = async (apiKey: string, cityName: string) => {
+export const generateDestinationDetail = async (apiKey: string, cityName: string, language: string = 'en') => {
+  const langName = language === 'hi' ? 'Hindi' : 'English';
   const prompt = `Create a deep-dive travel guide for ${cityName}.
 Respond ONLY with valid JSON in this structure:
 {
-  "special_title": "Short poetic title (e.g. City of Pearls and Nizams)",
-  "narrative": "A compelling 3-4 sentence narrative about what makes this place unique, its vibe, and history.",
-  "recommended_duration": "E.g. 3-5 Days",
-  "peak_season": "E.g. October to March",
+  "special_title": "Short poetic title (e.g. City of Pearls and Nizams) in ${langName}",
+  "narrative": "A compelling 3-4 sentence narrative in ${langName} about what makes this place unique, its vibe, and history.",
+  "recommended_duration": "E.g. 3-5 Days (in ${langName})",
+  "peak_season": "E.g. October to March (in ${langName})",
   "famous_places": [
     {
-      "name": "Place Name",
-      "description": "Why it's iconic",
-      "speciality": "Unique detail"
+      "name": "Place Name (in ${langName})",
+      "description": "Why it's iconic (in ${langName})",
+      "speciality": "Unique detail (in ${langName})"
     }
   ]
 }
-Include exactly 5 famous places. Do not use markdown.`;
+Include exactly 5 famous places. All content MUST be in ${langName}. Do not use markdown.`;
 
   return await generateTravelItinerary(apiKey, prompt);
 };

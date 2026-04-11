@@ -7,6 +7,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
 import DaySection from "@/components/itinerary/DaySection";
 import ReviewSection from "@/components/itinerary/ReviewSection";
+import { useTranslation } from "react-i18next";
 
 interface Activity {
   time: string;
@@ -43,6 +44,7 @@ interface ItineraryData {
 }
 
 const SharedItinerary = () => {
+  const { t } = useTranslation();
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const { user } = useAuth();
@@ -61,7 +63,7 @@ const SharedItinerary = () => {
           .maybeSingle();
 
         if (error || !data) {
-          setError("Itinerary not found or has been removed.");
+          setError(t('shared.missing_desc'));
           return;
         }
 
@@ -72,7 +74,7 @@ const SharedItinerary = () => {
           budget: data.budget ?? undefined,
         });
       } catch {
-        setError("Failed to load itinerary.");
+        setError(t('shared.loading_error') || "Failed to load itinerary.");
       } finally {
         setLoading(false);
       }
@@ -86,7 +88,7 @@ const SharedItinerary = () => {
       <div className="min-h-screen pt-24 pb-16 flex items-center justify-center">
         <div className="text-center">
           <Loader2 className="mx-auto mb-4 h-8 w-8 animate-spin text-primary" />
-          <p className="text-muted-foreground">Loading itinerary…</p>
+          <p className="text-muted-foreground">{t('shared.loading')}</p>
         </div>
       </div>
     );
@@ -98,10 +100,10 @@ const SharedItinerary = () => {
         <div className="container mx-auto max-w-3xl px-4">
           <div className="card-travel py-12 sm:py-16 text-center">
             <AlertTriangle className="mx-auto mb-4 h-10 w-10 sm:h-12 sm:w-12 text-secondary" />
-            <h2 className="mb-2 font-display text-xl sm:text-2xl font-bold text-foreground">Itinerary Not Found</h2>
-            <p className="mb-6 text-sm sm:text-base text-muted-foreground">{error || "This itinerary doesn't exist."}</p>
+            <h2 className="mb-2 font-display text-xl sm:text-2xl font-bold text-foreground">{t('shared.not_found')}</h2>
+            <p className="mb-6 text-sm sm:text-base text-muted-foreground">{error || t('shared.missing_desc')}</p>
             <Button onClick={() => navigate("/planner")} className="btn-hero !px-5 !py-2.5 sm:!px-6 sm:!py-3 !text-sm">
-              Plan Your Own Trip
+              {t('shared.plan_own')}
             </Button>
           </div>
         </div>
@@ -109,7 +111,7 @@ const SharedItinerary = () => {
     );
   }
 
-  const destination = itinerary.destination || meta?.destination || "Shared Destination";
+  const destination = itinerary.destination || meta?.destination || t('shared.unnamed');
   const breakdown = itinerary.budget_breakdown;
 
   return (
@@ -120,7 +122,7 @@ const SharedItinerary = () => {
             onClick={() => navigate(-1)}
             className="mb-4 sm:mb-6 inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors"
           >
-            <ArrowLeft className="h-4 w-4" /> Back
+            <ArrowLeft className="h-4 w-4" /> {t('shared.back')}
           </button>
         </motion.div>
 
@@ -131,13 +133,13 @@ const SharedItinerary = () => {
           className="mb-6 sm:mb-8"
         >
           <span className="mb-1 inline-block text-xs sm:text-sm font-semibold uppercase tracking-wider text-primary">
-            Shared Itinerary
+            {t('shared.title')}
           </span>
           <h1 className="font-display text-2xl sm:text-3xl font-bold text-foreground md:text-4xl">
             {destination}
           </h1>
           <p className="mt-1 text-sm text-muted-foreground">
-            {itinerary.days.length} days · {meta?.companion || "Solo"} · ₹{meta?.budget || "N/A"} budget
+            {itinerary.days.length} {t('shared.days_prefix')} · {meta?.companion || t('shared.solo')} · ₹{meta?.budget || "N/A"} budget
           </p>
           {itinerary.summary && (
             <p className="mt-2 text-xs sm:text-sm text-muted-foreground italic">{itinerary.summary}</p>
@@ -154,7 +156,7 @@ const SharedItinerary = () => {
           >
             {itinerary.estimated_total && (
               <div>
-                <p className="text-xs text-muted-foreground">Est. Total</p>
+                <p className="text-xs text-muted-foreground">{t('shared.est_total')}</p>
                 <p className="text-base sm:text-lg font-bold text-foreground">{itinerary.estimated_total}</p>
               </div>
             )}
@@ -164,25 +166,25 @@ const SharedItinerary = () => {
                 <div className="grid grid-cols-2 gap-3 sm:flex sm:gap-6 w-full sm:w-auto">
                   {breakdown.accommodation && (
                     <div>
-                      <p className="text-xs text-muted-foreground">Stay</p>
+                      <p className="text-xs text-muted-foreground">{t('shared.stay')}</p>
                       <p className="text-xs sm:text-sm font-semibold text-foreground">{breakdown.accommodation}</p>
                     </div>
                   )}
                   {breakdown.food && (
                     <div>
-                      <p className="text-xs text-muted-foreground">Food</p>
+                      <p className="text-xs text-muted-foreground">{t('shared.food')}</p>
                       <p className="text-xs sm:text-sm font-semibold text-foreground">{breakdown.food}</p>
                     </div>
                   )}
                   {breakdown.transport && (
                     <div>
-                      <p className="text-xs text-muted-foreground">Transport</p>
+                      <p className="text-xs text-muted-foreground">{t('shared.transport')}</p>
                       <p className="text-xs sm:text-sm font-semibold text-foreground">{breakdown.transport}</p>
                     </div>
                   )}
                   {breakdown.activities && (
                     <div>
-                      <p className="text-xs text-muted-foreground">Activities</p>
+                      <p className="text-xs text-muted-foreground">{t('shared.activities')}</p>
                       <p className="text-xs sm:text-sm font-semibold text-foreground">{breakdown.activities}</p>
                     </div>
                   )}

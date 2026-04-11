@@ -5,6 +5,7 @@ import { Plus, MapPin, Calendar, Trash2, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/hooks/useAuth";
 import { supabase } from "@/integrations/supabase/client";
+import { useTranslation } from "react-i18next";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -30,6 +31,7 @@ interface Trip {
 }
 
 const Dashboard = () => {
+  const { t } = useTranslation();
   const { user, loading: authLoading } = useAuth();
   const [trips, setTrips] = useState<Trip[]>([]);
   const [loading, setLoading] = useState(true);
@@ -115,27 +117,27 @@ const Dashboard = () => {
             <div>
               <div className="inline-flex items-center gap-2 rounded-full bg-primary/10 px-3 py-1 text-xs font-semibold text-primary border border-primary/20 mb-3">
                 <MapPin className="h-3 w-3" />
-                <span>Travel Dashboard</span>
+                <span>{t('dashboard.title')}</span>
               </div>
               <h1 className="font-display text-4xl lg:text-5xl font-bold text-foreground">
-                Your <span className="text-gradient">Adventures</span>
+                {t('dashboard.adventures')}
               </h1>
             </div>
             
             <div className="flex items-center gap-4">
               <div className="glass-panel px-6 py-3 flex flex-col items-center border-primary/10">
                 <span className="text-2xl font-bold text-primary">{trips.length}</span>
-                <span className="text-[10px] uppercase font-bold text-muted-foreground tracking-widest">Trips Saved</span>
+                <span className="text-[10px] uppercase font-bold text-muted-foreground tracking-widest">{t('dashboard.trips_saved')}</span>
               </div>
               <div className="glass-panel px-6 py-3 flex flex-col items-center border-secondary/10">
                 <span className="text-2xl font-bold text-secondary">
                   {trips.reduce((acc, t) => acc + t.days, 0)}
                 </span>
-                <span className="text-[10px] uppercase font-bold text-muted-foreground tracking-widest">Days Planned</span>
+                <span className="text-[10px] uppercase font-bold text-muted-foreground tracking-widest">{t('dashboard.days_planned')}</span>
               </div>
               <Link to="/planner">
                 <Button className="btn-hero h-14 !rounded-2xl gap-2 shadow-glow">
-                  <Plus className="h-5 w-5" /> New Trip
+                  <Plus className="h-5 w-5" /> {t('dashboard.new_trip')}
                 </Button>
               </Link>
             </div>
@@ -150,11 +152,11 @@ const Dashboard = () => {
               <div className="h-20 w-20 rounded-full bg-muted/50 flex items-center justify-center mx-auto mb-6">
                 <MapPin className="h-10 w-10 text-muted-foreground/40" />
               </div>
-              <h3 className="mb-2 font-display text-2xl font-semibold text-foreground">Sign in to see your trips</h3>
+              <h3 className="mb-2 font-display text-2xl font-semibold text-foreground">{t('dashboard.signin_prompt')}</h3>
               <p className="mb-8 text-muted-foreground max-w-sm mx-auto">
-                Join our community of travelers to save itineraries and access them anywhere.
+                {t('dashboard.join_community')}
               </p>
-              <Button onClick={() => window.location.href = '/'} className="btn-hero !px-8">Get Started</Button>
+              <Button onClick={() => window.location.href = '/'} className="btn-hero !px-8">{t('dashboard.get_started')}</Button>
             </motion.div>
           ) : trips.length === 0 ? (
             <motion.div 
@@ -165,12 +167,12 @@ const Dashboard = () => {
               <div className="h-20 w-20 rounded-full bg-muted/50 flex items-center justify-center mx-auto mb-6">
                 <MapPin className="h-10 w-10 text-muted-foreground/40" />
               </div>
-              <h3 className="mb-2 font-display text-2xl font-semibold text-foreground">No trips yet</h3>
+              <h3 className="mb-2 font-display text-2xl font-semibold text-foreground">{t('dashboard.no_trips')}</h3>
               <p className="mb-8 text-muted-foreground max-w-sm mx-auto">
-                Your future adventures are waiting to be planned. Let's start now!
+                {t('dashboard.future_adventures')}
               </p>
               <Link to="/planner">
-                <Button className="btn-hero !px-8">Plan a Trip</Button>
+                <Button className="btn-hero !px-8">{t('dashboard.plan_trip')}</Button>
               </Link>
             </motion.div>
           ) : (
@@ -207,7 +209,7 @@ const Dashboard = () => {
                             <Calendar className="h-3.5 w-3.5" /> {formatDate(trip.created_at)}
                           </span>
                           <span className="flex items-center gap-1.5 px-2 py-1 rounded-md bg-white/5">
-                            {trip.days} days
+                            {trip.days} {t('dashboard.days_suffix')}
                           </span>
                           {trip.companion && (
                             <span className="flex items-center gap-1.5 px-2 py-1 rounded-md bg-white/5">
@@ -242,7 +244,7 @@ const Dashboard = () => {
                         }}
                       >
                         <Button className="w-full bg-white/10 hover:bg-white/20 text-foreground border-white/10 !rounded-xl transition-all">
-                          View Details
+                          {t('dashboard.view_details')}
                         </Button>
                       </Link>
                       <Button
@@ -265,15 +267,15 @@ const Dashboard = () => {
       <AlertDialog open={deleteId !== null} onOpenChange={(open) => !open && setDeleteId(null)}>
         <AlertDialogContent className="max-w-[90vw] sm:max-w-lg">
           <AlertDialogHeader>
-            <AlertDialogTitle className="font-display">Delete Trip</AlertDialogTitle>
+            <AlertDialogTitle className="font-display">{t('dashboard.delete_trip')}</AlertDialogTitle>
             <AlertDialogDescription>
-              Are you sure you want to delete this trip? This action cannot be undone.
+              {t('dashboard.delete_confirm')}
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogCancel>{t('dashboard.cancel')}</AlertDialogCancel>
             <AlertDialogAction onClick={handleDelete} className="bg-destructive text-destructive-foreground hover:bg-destructive/90">
-              Delete
+              {t('dashboard.delete')}
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>

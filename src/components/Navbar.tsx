@@ -5,6 +5,8 @@ import { motion, AnimatePresence } from "framer-motion";
 import { useAuth } from "@/hooks/useAuth";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "@/hooks/use-toast";
+import { useTranslation } from "react-i18next";
+import { Globe } from "lucide-react";
 
 import {
   DropdownMenu,
@@ -15,19 +17,25 @@ import {
 } from "@/components/ui/dropdown-menu";
 
 const navLinks = [
-  { to: "/", label: "Home" },
-  { to: "/trending", label: "Trending" },
-  { to: "/planner", label: "Plan Trip" },
-  { to: "/dashboard", label: "Dashboard" },
+  { to: "/", labelKey: "nav.home" },
+  { to: "/trending", labelKey: "nav.trending" },
+  { to: "/planner", labelKey: "nav.plan_trip" },
+  { to: "/dashboard", labelKey: "nav.dashboard" }, 
 ];
 
 const Navbar = () => {
+  const { t, i18n } = useTranslation();
   const [open, setOpen] = useState(false);
   const [dark, setDark] = useState(() => document.documentElement.classList.contains("dark"));
   const location = useLocation();
   const { user, loading, signOut } = useAuth();
   const [profileName, setProfileName] = useState<string | null>(null);
   const [profileAvatar, setProfileAvatar] = useState<string | null>(null);
+
+  const toggleLanguage = () => {
+    const nextLang = i18n.language === "en" ? "hi" : "en";
+    i18n.changeLanguage(nextLang);
+  };
 
   const toggleTheme = () => {
     const next = !dark;
@@ -137,7 +145,7 @@ const Navbar = () => {
                   : "text-muted-foreground hover:text-foreground"
               }`}
             >
-              {l.label}
+              {t(l.labelKey)}
             </Link>
           ))}
 
@@ -148,6 +156,15 @@ const Navbar = () => {
             aria-label="Toggle theme"
           >
             {dark ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
+          </button>
+
+          {/* Language toggle */}
+          <button
+            onClick={toggleLanguage}
+            className="ml-1 flex items-center gap-1.5 rounded-lg border border-white/5 bg-white/5 px-2.5 py-1.5 text-[10px] font-black uppercase tracking-widest text-muted-foreground transition-all hover:bg-primary/20 hover:text-primary"
+          >
+            <Globe className="h-3 w-3" />
+            {i18n.language.toUpperCase()}
           </button>
 
           {/* Auth section */}
@@ -177,17 +194,17 @@ const Navbar = () => {
                 <DropdownMenuSeparator />
                 <DropdownMenuItem asChild>
                   <Link to="/dashboard" className="cursor-pointer gap-2">
-                    <UserIcon className="h-4 w-4" /> Dashboard
+                    <UserIcon className="h-4 w-4" /> {t('nav.dashboard')}
                   </Link>
                 </DropdownMenuItem>
                 <DropdownMenuItem asChild>
                   <Link to="/profile" className="cursor-pointer gap-2">
-                    <Settings className="h-4 w-4" /> Edit Profile
+                    <Settings className="h-4 w-4" /> {t('nav.profile')}
                   </Link>
                 </DropdownMenuItem>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem onClick={signOut} className="cursor-pointer gap-2 text-destructive focus:text-destructive">
-                  <LogOut className="h-4 w-4" /> Sign Out
+                  <LogOut className="h-4 w-4" /> {t('nav.signout')}
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
@@ -249,7 +266,7 @@ const Navbar = () => {
                       : "text-muted-foreground hover:text-foreground"
                   }`}
                 >
-                  {l.label}
+                  {t(l.labelKey)}
                 </Link>
               ))}
               {!loading && !user && (

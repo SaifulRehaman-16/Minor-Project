@@ -2,8 +2,10 @@ import { useState, useEffect } from "react";
 import { useAuth } from "@/hooks/useAuth";
 import { motion } from "framer-motion";
 import { supabase } from "@/integrations/supabase/client";
+import { useTranslation } from "react-i18next";
 
 const NamasteGreeting = () => {
+  const { t } = useTranslation();
   const { user } = useAuth();
   const [profileName, setProfileName] = useState<string | null>(null);
 
@@ -73,11 +75,11 @@ const NamasteGreeting = () => {
             transition={{ delay: 0.2, duration: 0.6 }}
             className="inline-block px-4 py-1.5 rounded-full bg-white/5 border border-white/10 backdrop-blur-sm text-xs font-bold uppercase tracking-[0.3em] text-primary mb-2"
           >
-            Welcome Back
+            {t('greeting.welcome')}
           </motion.div>
           
           <h2 className="font-serif italic text-5xl md:text-7xl lg:text-8xl text-foreground leading-tight">
-            Namaste, <span className="text-gradient not-italic font-black">{displayName}</span>
+            {t('greeting.namaste')}, <span className="text-gradient not-italic font-black">{displayName}</span>
           </h2>
           
           <motion.p 
@@ -86,7 +88,7 @@ const NamasteGreeting = () => {
             transition={{ delay: 0.5 }}
             className="text-muted-foreground text-lg md:text-xl max-w-2xl mx-auto font-medium"
           >
-            Your next great adventure is just a heartbeat away. Where shall we wander today?
+            {t('greeting.desc')}
           </motion.p>
         </motion.div>
       </div>

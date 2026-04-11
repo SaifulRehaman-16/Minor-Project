@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import SafeImage from "@/components/ui/SafeImage";
 import { generateDestinationDetail } from "@/lib/ai";
 import { toast } from "@/hooks/use-toast";
+import { useTranslation } from "react-i18next";
 import { ALL_DESTINATIONS } from "@/data/destinations";
 
 interface FamousPlace {
@@ -23,6 +24,7 @@ interface DestinationData {
 }
 
 const DestinationDetail = () => {
+  const { t, i18n } = useTranslation();
   const { id } = useParams();
   const location = useLocation();
   const navigate = useNavigate();
@@ -48,7 +50,7 @@ const DestinationDetail = () => {
       }
 
       try {
-        const result = await generateDestinationDetail(apiKey, cityName);
+        const result = await generateDestinationDetail(apiKey, cityName, i18n.language);
         setData(result);
       } catch (error: any) {
         console.error("Failed to fetch destination details:", error);
@@ -77,8 +79,8 @@ const DestinationDetail = () => {
           />
           <Sparkles className="absolute inset-0 m-auto h-8 w-8 text-primary animate-pulse" />
         </div>
-        <h2 className="text-3xl font-black text-white tracking-widest uppercase mb-2">Analyzing {cityName}</h2>
-        <p className="text-primary font-medium tracking-[0.2em] italic uppercase">Consulting AI Travel Historians...</p>
+        <h2 className="text-3xl font-black text-white tracking-widest uppercase mb-2">{t('dest_detail.analyzing')} {cityName}</h2>
+        <p className="text-primary font-medium tracking-[0.2em] italic uppercase">{t('dest_detail.consulting')}</p>
       </div>
     );
   }
@@ -98,7 +100,7 @@ const DestinationDetail = () => {
         <div className="absolute top-28 left-0 right-0 z-10">
           <div className="container mx-auto px-6">
             <Link to="/trending" className="inline-flex items-center gap-2 text-white/80 font-bold text-sm bg-black/20 backdrop-blur-md px-4 py-2 rounded-full hover:bg-black/40 transition-all group">
-              <ArrowLeft className="h-4 w-4 group-hover:-translate-x-1 transition-transform" /> Back to Trends
+              <ArrowLeft className="h-4 w-4 group-hover:-translate-x-1 transition-transform" /> {t('dest_detail.back')}
             </Link>
           </div>
         </div>
@@ -111,7 +113,7 @@ const DestinationDetail = () => {
               className="max-w-4xl"
             >
               <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-xl bg-primary/20 backdrop-blur-md border border-primary/30 text-[10px] font-black text-primary uppercase tracking-[0.3em] mb-4">
-                <Sparkles className="h-3 w-3" /> AI Destination Insights
+                <Sparkles className="h-3 w-3" /> {t('dest_detail.insights')}
               </div>
               <h1 className="text-6xl md:text-8xl font-black text-white tracking-tighter leading-none mb-4">
                 {cityName}
@@ -139,7 +141,7 @@ const DestinationDetail = () => {
               <div className="p-3 rounded-2xl bg-primary/10 text-primary">
                 <Compass className="h-6 w-6" />
               </div>
-              <h2 className="text-xl font-black uppercase tracking-widest text-foreground">The Essence</h2>
+              <h2 className="text-xl font-black uppercase tracking-widest text-foreground">{t('dest_detail.essence')}</h2>
             </div>
             <p className="text-xl md:text-2xl text-muted-foreground leading-relaxed font-medium">
               {data?.narrative}
@@ -156,15 +158,15 @@ const DestinationDetail = () => {
               <div className="p-2.5 rounded-xl bg-secondary/10 text-secondary">
                 <Info className="h-5 w-5" />
               </div>
-              <p className="text-sm font-black uppercase tracking-[0.2em] text-secondary">Mission Readiness</p>
+              <p className="text-sm font-black uppercase tracking-[0.2em] text-secondary">{t('dest_detail.readiness')}</p>
             </div>
             <div className="grid grid-cols-2 gap-8 text-center sm:text-left">
               <div>
-                <p className="text-[10px] font-bold text-muted-foreground uppercase mb-1">Recommended Duration</p>
+                <p className="text-[10px] font-bold text-muted-foreground uppercase mb-1">{t('dest_detail.duration')}</p>
                 <p className="text-white font-black text-xl tracking-tight">{data?.recommended_duration || "3-5 Days"}</p>
               </div>
               <div>
-                <p className="text-[10px] font-bold text-muted-foreground uppercase mb-1">Peak Season</p>
+                <p className="text-[10px] font-bold text-muted-foreground uppercase mb-1">{t('dest_detail.peak')}</p>
                 <p className="text-white font-black text-xl tracking-tight">{data?.peak_season || "Oct - Mar"}</p>
               </div>
             </div>
@@ -178,7 +180,7 @@ const DestinationDetail = () => {
               <div className="p-3 rounded-2xl bg-primary/10 text-primary">
                 <Landmark className="h-6 w-6" />
               </div>
-              <h2 className="text-3xl font-black uppercase tracking-tighter text-foreground">Famous Places to Visit</h2>
+              <h2 className="text-3xl font-black uppercase tracking-tighter text-foreground">{t('dest_detail.famous_places')}</h2>
             </div>
           </div>
 
@@ -224,15 +226,15 @@ const DestinationDetail = () => {
         >
           <div className="absolute inset-0 bg-primary/10 backdrop-blur-xl border border-white/10" />
           <div className="relative z-10 space-y-8">
-            <h2 className="text-4xl md:text-6xl font-black text-white tracking-tighter">Ready to experience {cityName}?</h2>
+            <h2 className="text-4xl md:text-6xl font-black text-white tracking-tighter">{t('dest_detail.ready_to_experience')} {cityName}?</h2>
             <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
-              Our AI is ready to architect your perfect mission. Customized for your interests and budget.
+              {t('dest_detail.ai_ready')}
             </p>
             <Button
               onClick={() => navigate("/planner", { state: { destination: cityName } })}
               className="btn-hero h-20 px-16 rounded-[2.5rem] text-2xl font-black shadow-2x-glow"
             >
-              GENERATE MY PLAN <ArrowRight className="ml-3 h-8 w-8" />
+              {t('dest_detail.generate_btn')} <ArrowRight className="ml-3 h-8 w-8" />
             </Button>
           </div>
         </motion.section>
