@@ -49,7 +49,7 @@ const Landing = () => {
             <motion.span variants={fade} custom={0} className="mb-2 inline-block text-sm font-semibold uppercase tracking-widest text-primary">{t('hero.why_explorer')}</motion.span>
             <motion.h2 variants={fade} custom={1} className="font-display text-4xl font-black text-foreground md:text-6xl">
               <Trans i18nKey="hero.features_title">
-                Travel <span className="text-gradient">Smarter</span>, Not Harder
+                <span className="text-gradient" />
               </Trans>
             </motion.h2>
           </motion.div>
@@ -83,7 +83,7 @@ const Landing = () => {
             <motion.span variants={fade} custom={0} className="mb-2 inline-block text-sm font-semibold uppercase tracking-widest text-primary">{t('steps.process')}</motion.span>
             <motion.h2 variants={fade} custom={1} className="font-display text-4xl font-black text-foreground md:text-6xl">
               <Trans i18nKey="hero.steps_title">
-                Plan in <span className="text-gradient">3 Easy Steps</span>
+                <span className="text-gradient" />
               </Trans>
             </motion.h2>
           </motion.div>
@@ -133,7 +133,7 @@ const Landing = () => {
               <Sparkles className="h-14 w-14 text-white/20 mx-auto mb-8 animate-pulse" />
               <h2 className="mb-6 font-display text-4xl font-black text-white md:text-7xl tracking-tighter">
                 <Trans i18nKey="hero.footer_title">
-                  Ready to <span className="text-gradient">Explore</span> Modernity?
+                  <span className="text-gradient" />
                 </Trans>
               </h2>
               <p className="mx-auto mb-12 max-w-xl text-xl text-white/60 font-medium">
