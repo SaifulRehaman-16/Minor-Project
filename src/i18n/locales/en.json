@@ -152,7 +152,11 @@
     "stay": "Stay",
     "food": "Food",
     "transport": "Transport",
-    "activities": "Activities"
+    "activities": "Activities",
+    "stay_label": "Stay",
+    "food_label": "Food",
+    "transport_label": "Transport",
+    "activities_label": "Activities"
   },
   "not_found": {
     "title": "404 - Expedition Lost",
@@ -185,6 +189,7 @@
     "dates_label": "When are you going?",
     "dates_placeholder": "Select dates",
     "people_label": "Travelers",
+    "duration_label": "Days",
     "budget_label": "Mission Budget (₹)",
     "interests_label": "Personal Interests",
     "companion_label": "Companions",
@@ -196,9 +201,22 @@
     "regenerate": "Regenerate",
     "share": "Share",
     "back_to_planner": "Back to Planner",
-    "interactive_map": "Interactive Map",
-    "list_view": "List View",
-    "budget_breakdown": "Budget Breakdown",
-    "day": "Day"
+    "day": "Day",
+    "mission_plan": "Mission Plan",
+    "view_map": "View Map",
+    "optimization_complete": "Optimization Complete",
+    "optimization_desc": "Adjust activities as needed or regenerate for a new perspective.",
+    "neural_recalibration": "Neural Recalibration...",
+    "regenerate_mission": "Regenerate Mission",
+    "share_itinerary": "Share Itinerary",
+    "share_itinerary_desc": "Give your friends access to this trip.",
+    "login_to_share": "Login to share...",
+    "translating": "Translating itinerary...",
+    "translate_mission": "Translate Mission",
+    "translate_toast_title": "Content Mismatch",
+    "translate_toast_desc": "The UI changed, but the plan is still in {0}. Would you like to translate it?",
+    "translate_action": "Translate Now",
+    "translation_success": "Translation Complete",
+    "translation_success_desc": "Your mission has been elegantly translated."
   }
 }

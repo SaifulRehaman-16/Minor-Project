@@ -152,7 +152,11 @@
     "stay": "रुकना",
     "food": "भोजन",
     "transport": "परिवहन",
-    "activities": "गतिविधियां"
+    "activities": "गतिविधियां",
+    "stay_label": "रुकना",
+    "food_label": "भोजन",
+    "transport_label": "परिवहन",
+    "activities_label": "गतिविधियां"
   },
   "not_found": {
     "title": "404 - साहसिक कार्य खो गया",
@@ -185,6 +189,7 @@
     "dates_label": "आप कब जा रहे हैं?",
     "dates_placeholder": "तिथियां चुनें",
     "people_label": "यात्री",
+    "duration_label": "दिन",
     "budget_label": "मिशन बजट (₹)",
     "interests_label": "व्यक्तिगत रुचियां",
     "companion_label": "साथी",
@@ -196,9 +201,22 @@
     "regenerate": "फिर से बनाएँ",
     "share": "शेयर करें",
     "back_to_planner": "प्लानर पर वापस",
-    "interactive_map": "इंटरैक्टिव मैप",
-    "list_view": "लिस्ट व्यू",
-    "budget_breakdown": "बजट विवरण",
-    "day": "दिन"
+    "day": "दिन",
+    "mission_plan": "मिशन जानकारी",
+    "view_map": "मैप देखें",
+    "optimization_complete": "अनुकूलन पूर्ण",
+    "optimization_desc": "आवश्यकतानुसार गतिविधियों को समायोजित करें या नए दृष्टिकोण के लिए फिर से योजना बनाएं।",
+    "neural_recalibration": "न्यूरल रीकैलिब्रेशन...",
+    "regenerate_mission": "मिशन को फिर से तैयार करें",
+    "share_itinerary": "यात्रा कार्यक्रम साझा करें",
+    "share_itinerary_desc": "अपने दोस्तों को इस ट्रिप तक पहुंच दें।",
+    "login_to_share": "साझा करने के लिए लॉगिन करें...",
+    "translating": "यात्रा कार्यक्रम का अनुवाद किया जा रहा है...",
+    "translate_mission": "मिशन का अनुवाद करें",
+    "translate_toast_title": "सामग्री बेमेल",
+    "translate_toast_desc": "UI बदल गया है, लेकिन योजना अभी भी {0} में है। क्या आप इसका अनुवाद करना चाहते हैं?",
+    "translate_action": "अभी अनुवाद करें",
+    "translation_success": "अनुवाद पूर्ण",
+    "translation_success_desc": "आपका मिशन सफलतापूर्वक अनुवादित किया गया है।"
   }
 }

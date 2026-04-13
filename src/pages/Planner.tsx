@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
-import { MapPin, Calendar as CalendarIcon, Wallet, Heart, Users, Sparkles, Loader2, Plus, X, ArrowRight, Plane, Briefcase, Map, Globe, Shield, ChevronRight, Zap } from "lucide-react";
+import { MapPin, Calendar as CalendarIcon, Wallet, Heart, Users, Sparkles, Loader2, Plus, Minus, X, ArrowRight, Plane, Briefcase, Map, Globe, Shield, ChevronRight, Zap } from "lucide-react";
 import { format } from "date-fns";
 import { Calendar } from "@/components/ui/calendar";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
@@ -323,11 +323,11 @@ Ensure all descriptions and titles are in ${i18n.language === 'en' ? 'English' :
                   onClick={() => setForm(p => ({ ...p, days: Math.max(1, parseInt(p.days) - 1).toString() }))}
                   className="h-12 w-12 rounded-full hover:bg-white/20 flex items-center justify-center text-white/60 hover:text-white transition-colors"
                 >
-                  <Plus className="h-6 w-6 rotate-45" />
+                  <Minus className="h-6 w-6" />
                 </button>
                 <div className="flex-1 text-center">
                   <span className="text-5xl font-black text-white leading-none block">{form.days}</span>
-                  <span className="text-[12px] uppercase font-bold text-white/60 tracking-widest">{t('planner.people_label')}</span>
+                  <span className="text-[12px] uppercase font-bold text-white/60 tracking-widest">{t('planner.duration_label')}</span>
                 </div>
                 <button 
                   onClick={() => setForm(p => ({ ...p, days: Math.min(30, parseInt(p.days) + 1).toString() }))}
@@ -392,13 +392,13 @@ Ensure all descriptions and titles are in ${i18n.language === 'en' ? 'English' :
             </div>
 
             <div className="space-y-4">
-              <Label className="text-[12px] font-black uppercase text-secondary tracking-[0.2em] block">Passenger Count</Label>
+              <Label className="text-[12px] font-black uppercase text-secondary tracking-[0.2em] block">{t('planner.people_label')}</Label>
               <div className="flex items-center gap-6 bg-white/10 p-4 rounded-[2rem] border border-white/20 h-24">
                 <button 
                   onClick={() => setForm(p => ({ ...p, people: Math.max(1, parseInt(p.people) - 1).toString() }))}
                   className="h-12 w-12 rounded-full hover:bg-white/20 flex items-center justify-center text-white/60 hover:text-white transition-colors"
                 >
-                  <Plus className="h-6 w-6 rotate-45" />
+                  <Minus className="h-6 w-6" />
                 </button>
                 <div className="flex-1 text-center">
                   <span className="text-5xl font-black text-white leading-none block">{form.people}</span>

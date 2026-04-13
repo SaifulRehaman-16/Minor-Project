@@ -66,6 +66,8 @@ const Itinerary = () => {
   const [isMapOpen, setIsMapOpen] = useState(false);
   const [activeDayIndex, setActiveDayIndex] = useState(0);
   const [weatherLoading, setWeatherLoading] = useState(false);
+  const [translating, setTranslating] = useState(false);
+  const [currentItineraryLang, setCurrentItineraryLang] = useState(location.state?.form?.language || i18n.language);
 
   // Fail-safe: If someone visits /itinerary directly without a state, send them home
   useEffect(() => {
@@ -121,6 +123,28 @@ const Itinerary = () => {
 
     getLiveWeather();
   }, [itinerary?.destination]); // Run once when destination is confirmed
+
+  // Suggest translation when language changes
+  useEffect(() => {
+    const handleLangChange = (lang: string) => {
+      // Only suggest translation if the current itinerary language is different
+      if (lang !== currentItineraryLang) {
+        toast({
+          title: t('itinerary.translate_toast_title'),
+          description: t('itinerary.translate_toast_desc', { 0: currentItineraryLang === 'en' ? 'English' : 'Hindi' }),
+          action: (
+            <Button size="sm" onClick={() => handleTranslate(lang)} className="bg-primary/20 text-primary hover:bg-primary/30 border-primary/30">
+              {t('itinerary.translate_action')}
+            </Button>
+          ),
+          duration: 8000,
+        });
+      }
+    };
+
+    i18n.on('languageChanged', handleLangChange);
+    return () => i18n.off('languageChanged', handleLangChange);
+  }, [i18n, toast, currentItineraryLang]);
 
   const shareUrl = useMemo(() => {
     if (!savedId) return null;
@@ -193,6 +217,39 @@ const Itinerary = () => {
     persistItinerary(newItinerary);
   };
 
+  const handleTranslate = async (targetLang: string) => {
+    const apiKey = import.meta.env.VITE_GROQ_API_KEY;
+    if (!apiKey) return;
+
+    setTranslating(true);
+    try {
+      const prompt = `Translate the following travel itinerary JSON into ${targetLang === 'hi' ? 'Hindi' : 'English'}. 
+ONLY translate user-facing strings like "trip_title", "summary", activity "title", and activity "description".
+DO NOT change keys, coordinates (lat/lng), costs (unless converting currency symbols appropriately), or icons. 
+Maintain the exact same JSON structure.
+
+JSON to translate:
+${JSON.stringify(itinerary)}`;
+
+      const data = await generateTravelItinerary(apiKey, prompt);
+      if (!data) throw new Error("Translation failed.");
+
+      if (user && savedId) {
+        await supabase.from("itineraries").update({ itinerary_data: data as any }).eq("id", savedId);
+      }
+      setItinerary(data);
+      setCurrentItineraryLang(targetLang);
+      toast({ 
+        title: t('itinerary.translation_success'), 
+        description: t('itinerary.translation_success_desc') 
+      });
+    } catch (err: any) {
+      toast({ title: "Translation Error", description: err.message, variant: "destructive" });
+    } finally {
+      setTranslating(false);
+    }
+  };
+
   const handleRegenerate = async () => {
     const apiKey = import.meta.env.VITE_GROQ_API_KEY;
     if (!apiKey) {
@@ -209,13 +266,13 @@ Each day must include: Breakfast, Morning Sightseeing, Lunch, Afternoon Activity
 Create a detailed day-by-day travel itinerary for a trip to ${form.destination} for ${form.days} days.
 Starting from ${form.startPlace || "Home"}. Budget: ₹${form.budget}. 
 Interests: ${form.interests && form.interests.length > 0 ? form.interests.join(", ") : "general sightseeing"}.
-Language: ${i18n.language === 'en' ? 'English' : 'Hindi'}.
+Language: ${i18n.language === 'hi' ? 'Hindi' : 'English'}.
 
 Respond ONLY with valid raw JSON following this exact structure (note the multiple activities):
 {
   "trip_title": "String",
   "destination": "${form.destination}",
-  "summary": "1-2 sentence overview in ${i18n.language === 'en' ? 'English' : 'Hindi'}",
+  "summary": "1-2 sentence overview in ${i18n.language === 'hi' ? 'Hindi' : 'English'}",
   "estimated_total": "₹XXXXX",
   "budget_breakdown": { "stay": "₹XXXXX", "food": "₹XXXXX", "transport": "₹XXXXX", "activities": "₹XXXXX" },
   "days": [ 
@@ -230,7 +287,7 @@ Respond ONLY with valid raw JSON following this exact structure (note the multip
     } 
   ]
 }
-Ensure all descriptions and titles are in ${i18n.language === 'en' ? 'English' : 'Hindi'}. Do not include markdown. PROVIDE 8-10 ACTIVITIES PER DAY. PROVIDE REAL COORDINATES.`;
+Ensure all descriptions and titles are in ${i18n.language === 'hi' ? 'Hindi' : 'English'}. Do not include markdown. PROVIDE 8-10 ACTIVITIES PER DAY. PROVIDE REAL COORDINATES.`;
 
       const data = await generateTravelItinerary(apiKey, prompt);
       if (!data) throw new Error("Neural generation failed.");
@@ -239,6 +296,7 @@ Ensure all descriptions and titles are in ${i18n.language === 'en' ? 'English' :
         await supabase.from("itineraries").update({ itinerary_data: data as any }).eq("id", savedId);
       }
       setItinerary(data);
+      setCurrentItineraryLang(i18n.language);
       toast({ title: "Itinerary Re-imagined", description: "A fresh perspective on your journey has been generated." });
     } catch (err: any) {
       toast({ title: "Generation Failed", description: err.message, variant: "destructive" });
@@ -295,11 +353,11 @@ Ensure all descriptions and titles are in ${i18n.language === 'en' ? 'English' :
                   <PopoverContent className="w-80 p-4 card-travel border-white/10" align="end">
                     <div className="space-y-4">
                       <div className="space-y-2">
-                        <h4 className="font-display font-medium leading-none">Share Itinerary</h4>
-                        <p className="text-sm text-muted-foreground">Give your friends access to this trip.</p>
+                        <h4 className="font-display font-medium leading-none">{t('itinerary.share_itinerary')}</h4>
+                        <p className="text-sm text-muted-foreground">{t('itinerary.share_itinerary_desc')}</p>
                       </div>
                       <div className="flex gap-2">
-                        <input readOnly value={shareUrl || "Login to share..."} className="flex-1 rounded-lg bg-black/40 border border-white/10 px-3 py-1.5 text-xs" />
+                        <input readOnly value={shareUrl || t('itinerary.login_to_share')} className="flex-1 rounded-lg bg-black/40 border border-white/10 px-3 py-1.5 text-xs" />
                         <Button size="sm" onClick={handleCopyLink} disabled={!shareUrl} className="btn-hero h-auto px-3 py-1.5">
                           {copied ? <Check className="h-4 w-4" /> : <Copy className="h-4 w-4" />}
                         </Button>
@@ -312,8 +370,8 @@ Ensure all descriptions and titles are in ${i18n.language === 'en' ? 'English' :
 
             {/* Header */}
             <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }} className="mb-8">
-              <span className="mb-1 inline-block text-xs font-semibold uppercase tracking-widest text-primary/80">
-                Mission Plan
+              <span className="mb-1 inline-block text-[10px] font-black tracking-[0.3em] text-primary/80">
+                {t('itinerary.mission_plan')}
               </span>
               <h1 className="font-display text-3xl sm:text-4xl font-bold tracking-tight text-foreground">
                 {itinerary.trip_title || destination}
@@ -329,7 +387,9 @@ Ensure all descriptions and titles are in ${i18n.language === 'en' ? 'English' :
                <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} transition={{ delay: 0.2 }} className="card-travel mb-10 flex flex-wrap items-center gap-6 !p-6 border-white/5 bg-white/5 backdrop-blur-md">
                   {Object.entries(breakdown).map(([key, value], i) => (
                     <div key={key} className="flex flex-col">
-                      <span className="text-[10px] uppercase font-bold tracking-widest text-muted-foreground mb-1">{key}</span>
+                      <span className="text-[10px] uppercase font-bold tracking-widest text-muted-foreground mb-1">
+                        {t(`shared.${key}_label`)}
+                      </span>
                       <span className="text-sm font-display font-bold text-foreground">{value as string}</span>
                     </div>
                   ))}
@@ -362,13 +422,19 @@ Ensure all descriptions and titles are in ${i18n.language === 'en' ? 'English' :
             <div className="mt-16 text-center space-y-6">
               <Sparkles className="h-8 w-8 text-secondary mx-auto" />
               <div className="space-y-2">
-                <h3 className="font-display text-lg font-bold">Optimization Complete</h3>
-                <p className="text-sm text-muted-foreground">Adjust activities as needed or regenerate for a new perspective.</p>
+                <h3 className="font-display text-lg font-bold">{t('itinerary.optimization_complete')}</h3>
+                <p className="text-sm text-muted-foreground">{t('itinerary.optimization_desc')}</p>
               </div>
-              <Button onClick={handleRegenerate} disabled={regenerating} className="btn-hero !px-10">
-                {regenerating ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <RefreshCw className="mr-2 h-4 w-4" />}
-                {regenerating ? "Neural Recalibration..." : "Regenerate Mission"}
-              </Button>
+              <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+                <Button onClick={() => handleTranslate(i18n.language)} disabled={translating || currentItineraryLang === i18n.language} variant="outline" className="btn-hero !px-10 border-white/10">
+                  {translating ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <RefreshCw className="mr-2 h-4 w-4" />}
+                  {translating ? t('itinerary.translating') : t('itinerary.translate_mission')}
+                </Button>
+                <Button onClick={handleRegenerate} disabled={regenerating} className="btn-hero !px-10">
+                  {regenerating ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <RefreshCw className="mr-2 h-4 w-4" />}
+                  {regenerating ? t('itinerary.neural_recalibration') : t('itinerary.regenerate_mission')}
+                </Button>
+              </div>
             </div>
             
             <div className="mt-12 py-10 border-t border-white/5">

@@ -32,9 +32,8 @@ const Navbar = () => {
   const [profileName, setProfileName] = useState<string | null>(null);
   const [profileAvatar, setProfileAvatar] = useState<string | null>(null);
 
-  const toggleLanguage = () => {
-    const nextLang = i18n.language === "en" ? "hi" : "en";
-    i18n.changeLanguage(nextLang);
+  const changeLanguage = (lang: string) => {
+    i18n.changeLanguage(lang);
   };
 
   const toggleTheme = () => {
@@ -158,14 +157,29 @@ const Navbar = () => {
             {dark ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
           </button>
 
-          {/* Language toggle */}
-          <button
-            onClick={toggleLanguage}
-            className="ml-1 flex items-center gap-1.5 rounded-lg border border-white/5 bg-white/5 px-2.5 py-1.5 text-[10px] font-black uppercase tracking-widest text-muted-foreground transition-all hover:bg-primary/20 hover:text-primary"
-          >
-            <Globe className="h-3 w-3" />
-            {i18n.language.toUpperCase()}
-          </button>
+          {/* Language Selector */}
+          <DropdownMenu>
+            <DropdownMenuTrigger className="ml-1 flex items-center gap-1.5 rounded-lg border border-white/5 bg-white/5 px-2.5 py-1.5 text-[10px] font-black uppercase tracking-widest text-muted-foreground transition-all hover:bg-primary/20 hover:text-primary outline-none focus-visible:ring-1 focus-visible:ring-primary">
+              <Globe className="h-3 w-3" />
+              {i18n.language === "en" ? "EN" : "HI"}
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end" className="w-32 glass-panel border-border/50">
+              <DropdownMenuItem 
+                onClick={() => changeLanguage("en")}
+                className={`cursor-pointer flex items-center justify-between ${i18n.language === "en" ? "text-primary font-bold" : ""}`}
+              >
+                English
+                {i18n.language === "en" && <div className="h-1.5 w-1.5 rounded-full bg-primary" />}
+              </DropdownMenuItem>
+              <DropdownMenuItem 
+                onClick={() => changeLanguage("hi")}
+                className={`cursor-pointer flex items-center justify-between ${i18n.language === "hi" ? "text-primary font-bold" : ""}`}
+              >
+                हिन्दी
+                {i18n.language === "hi" && <div className="h-1.5 w-1.5 rounded-full bg-primary" />}
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
 
           {/* Auth section */}
           {loading ? (
@@ -269,6 +283,35 @@ const Navbar = () => {
                   {t(l.labelKey)}
                 </Link>
               ))}
+              
+              {/* Mobile Language Selector */}
+              <div className="mt-2 flex flex-col gap-1 border-t border-border pt-4">
+                <p className="px-4 text-[10px] font-bold uppercase tracking-widest text-muted-foreground mb-1">
+                  {i18n.language === "en" ? "Select Language" : "भाषा चुनें"}
+                </p>
+                <div className="flex gap-2 px-2">
+                  <button
+                    onClick={() => { changeLanguage("en"); setOpen(false); }}
+                    className={`flex-1 rounded-lg px-4 py-2 text-sm font-medium transition-all ${
+                      i18n.language === "en" 
+                        ? "bg-primary text-primary-foreground shadow-lg shadow-primary/20" 
+                        : "bg-accent/50 text-muted-foreground"
+                    }`}
+                  >
+                    English
+                  </button>
+                  <button
+                    onClick={() => { changeLanguage("hi"); setOpen(false); }}
+                    className={`flex-1 rounded-lg px-4 py-2 text-sm font-medium transition-all ${
+                      i18n.language === "hi" 
+                        ? "bg-primary text-primary-foreground shadow-lg shadow-primary/20" 
+                        : "bg-accent/50 text-muted-foreground"
+                    }`}
+                  >
+                    हिन्दी
+                  </button>
+                </div>
+              </div>
               {!loading && !user && (
                 <div className="flex flex-col gap-2 mt-2">
                   <button

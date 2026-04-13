@@ -81,19 +81,19 @@ const ActivityCard = ({ activity, destination, readOnly, onUpdate, onDelete }: A
             className="text-sm"
           />
           <div className="flex flex-wrap items-center gap-2">
-            <span className="text-xs text-muted-foreground">Type:</span>
-            {(["attraction", "food", "transport", "hotel"] as const).map((t) => (
+            <span className="text-xs text-muted-foreground">{t('profile.type') || 'Type'}:</span>
+            {(["attraction", "food", "transport", "hotel"] as const).map((t_key) => (
               <button
-                key={t}
+                key={t_key}
                 type="button"
-                onClick={() => setDraft({ ...draft, type: t })}
+                onClick={() => setDraft({ ...draft, type: t_key })}
                 className={`rounded-full px-2 py-0.5 text-xs font-medium transition-all ${
-                  draft.type === t
-                    ? "ring-2 ring-primary " + typeColors[t]
+                  draft.type === t_key
+                    ? "ring-2 ring-primary " + typeColors[t_key]
                     : "bg-muted/50 text-muted-foreground"
                 }`}
               >
-                {t}
+                {t(`shared.${t_key}`)}
               </button>
             ))}
           </div>
@@ -103,14 +103,14 @@ const ActivityCard = ({ activity, destination, readOnly, onUpdate, onDelete }: A
               onClick={handleCancel}
               className="inline-flex items-center gap-1 rounded-lg px-3 py-1.5 text-xs font-medium text-muted-foreground hover:bg-muted transition-colors"
             >
-              <X className="h-3 w-3" /> Cancel
+              <X className="h-3 w-3" /> {t('dashboard.cancel')}
             </button>
             <button
               type="button"
               onClick={handleSave}
               className="inline-flex items-center gap-1 rounded-lg bg-primary px-3 py-1.5 text-xs font-medium text-primary-foreground hover:bg-primary/90 transition-colors"
             >
-              <Check className="h-3 w-3" /> Save
+              <Check className="h-3 w-3" /> {t('profile.save_btn')}
             </button>
           </div>
         </div>
@@ -138,7 +138,7 @@ const ActivityCard = ({ activity, destination, readOnly, onUpdate, onDelete }: A
             <div className="mb-1 flex flex-wrap items-center gap-2">
               {activity.time && <span className="text-xs font-medium text-muted-foreground">{activity.time}</span>}
               <span className={`inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-xs font-medium ${typeColors[actType] || typeColors.attraction}`}>
-                {typeIcons[actType] || typeIcons.attraction} {actType}
+                {typeIcons[actType] || typeIcons.attraction} {t(`shared.${actType}`)}
               </span>
             </div>
             <h3 className="font-display text-base sm:text-lg font-bold text-foreground break-words group-hover:text-primary transition-colors">
@@ -185,7 +185,7 @@ const ActivityCard = ({ activity, destination, readOnly, onUpdate, onDelete }: A
                 title={`View ${activity.title} on Google Maps`}
               >
                 <MapPin className="h-3.5 w-3.5" />
-                <span className="hidden sm:inline uppercase tracking-widest text-[10px]">View Map</span>
+                <span className="hidden sm:inline uppercase tracking-widest text-[10px]">{t('itinerary.view_map')}</span>
                 <ExternalLink className="h-3 w-3 opacity-50" />
               </button>
             </div>
