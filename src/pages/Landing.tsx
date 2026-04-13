@@ -6,7 +6,7 @@ import HeroSlider from "@/components/landing/HeroSlider";
 import NamasteGreeting from "@/components/landing/NamasteGreeting";
 import TrendingTrips from "@/components/landing/TrendingTrips";
 import { Button } from "@/components/ui/button";
-import { useTranslation } from "react-i18next";
+import { useTranslation, Trans } from "react-i18next";
 
 const features = [
   { icon: Sparkles, titleKey: "features.f1_title", descKey: "features.f1_desc" },
@@ -48,7 +48,9 @@ const Landing = () => {
           <motion.div initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-100px" }} className="mb-14 text-center">
             <motion.span variants={fade} custom={0} className="mb-2 inline-block text-sm font-semibold uppercase tracking-widest text-primary">{t('hero.why_explorer')}</motion.span>
             <motion.h2 variants={fade} custom={1} className="font-display text-4xl font-black text-foreground md:text-6xl">
-              {t('hero.features_title', { 0: <span className="text-gradient" key="span">{t('hero.features_smart')}</span> })}
+              <Trans i18nKey="hero.features_title">
+                Travel <span className="text-gradient">Smarter</span>, Not Harder
+              </Trans>
             </motion.h2>
           </motion.div>
           <motion.div initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-50px" }} className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
@@ -79,7 +81,11 @@ const Landing = () => {
         <div className="container mx-auto px-6">
           <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} className="mb-14 text-center">
             <motion.span variants={fade} custom={0} className="mb-2 inline-block text-sm font-semibold uppercase tracking-widest text-primary">{t('steps.process')}</motion.span>
-            <motion.h2 variants={fade} custom={1} className="font-display text-4xl font-black text-foreground md:text-6xl">{t('hero.steps_title', { 0: <span className="text-gradient" key="span">{t('hero.steps_easy')}</span> })}</motion.h2>
+            <motion.h2 variants={fade} custom={1} className="font-display text-4xl font-black text-foreground md:text-6xl">
+              <Trans i18nKey="hero.steps_title">
+                Plan in <span className="text-gradient">3 Easy Steps</span>
+              </Trans>
+            </motion.h2>
           </motion.div>
           <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} className="grid gap-12 md:grid-cols-3">
             {[
@@ -126,7 +132,9 @@ const Landing = () => {
             <div className="relative z-10 max-w-4xl mx-auto">
               <Sparkles className="h-14 w-14 text-white/20 mx-auto mb-8 animate-pulse" />
               <h2 className="mb-6 font-display text-4xl font-black text-white md:text-7xl tracking-tighter">
-                {t('hero.footer_title', { 0: <span className="text-gradient" key="span">{t('hero.footer_explore')}</span> })}
+                <Trans i18nKey="hero.footer_title">
+                  Ready to <span className="text-gradient">Explore</span> Modernity?
+                </Trans>
               </h2>
               <p className="mx-auto mb-12 max-w-xl text-xl text-white/60 font-medium">
                 {t('hero.footer_desc')}

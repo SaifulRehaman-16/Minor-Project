@@ -14,12 +14,9 @@
     "subtitle": "Travel Planner — AI Smart Travel Planner",
     "cta": "Start Planning Now",
     "why_explorer": "Why Explorer Mind",
-    "features_title": "Travel {0}, Not Harder",
-    "features_smart": "Smarter",
-    "steps_title": "Plan in {0}",
-    "steps_easy": "3 Easy Steps",
-    "footer_title": "Ready to {0} Modernity?",
-    "footer_explore": "Explore",
+    "features_title": "Travel <0>Smarter</0>, Not Harder",
+    "steps_title": "Plan in <0>3 Easy Steps</0>",
+    "footer_title": "Ready to <0>Explore</0> Modernity?",
     "footer_desc": "The world's most intelligent trip architect is at your service. Craft your legacy of travel in minutes."
   },
   "features": {
