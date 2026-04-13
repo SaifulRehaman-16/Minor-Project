@@ -87,11 +87,10 @@ const ActivityCard = ({ activity, destination, readOnly, onUpdate, onDelete }: A
                 key={t_key}
                 type="button"
                 onClick={() => setDraft({ ...draft, type: t_key })}
-                className={`rounded-full px-2 py-0.5 text-xs font-medium transition-all ${
-                  draft.type === t_key
-                    ? "ring-2 ring-primary " + typeColors[t_key]
-                    : "bg-muted/50 text-muted-foreground"
-                }`}
+                className={`rounded-full px-2 py-0.5 text-xs font-medium transition-all ${draft.type === t_key
+                  ? "ring-2 ring-primary " + typeColors[t_key]
+                  : "bg-muted/50 text-muted-foreground"
+                  }`}
               >
                 {t(`shared.${t_key}`)}
               </button>
@@ -148,7 +147,7 @@ const ActivityCard = ({ activity, destination, readOnly, onUpdate, onDelete }: A
               {activity.description}
             </p>}
           </div>
-          
+
           <div className="mt-4 flex items-center justify-between gap-4">
             <div className="flex items-center gap-3">
               {activity.cost && <span className="whitespace-nowrap text-sm font-bold text-secondary">{activity.cost}</span>}
