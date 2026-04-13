@@ -1,4 +1,6 @@
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
+import type { ReactNode } from "react";
 import { MapPin, Bus, Hotel, Clock, ExternalLink, Pencil, Trash2, Check, X } from "lucide-react";
 import { Input } from "@/components/ui/input";
 
@@ -20,7 +22,7 @@ const typeColors: Record<string, string> = {
   hotel: "bg-primary/10 text-primary",
 };
 
-const typeIcons: Record<string, React.ReactNode> = {
+const typeIcons: Record<string, ReactNode> = {
   attraction: <MapPin className="h-4 w-4" />,
   food: <Clock className="h-4 w-4" />,
   transport: <Bus className="h-4 w-4" />,
@@ -36,6 +38,7 @@ interface ActivityCardProps {
 }
 
 const ActivityCard = ({ activity, destination, readOnly, onUpdate, onDelete }: ActivityCardProps) => {
+  const { t } = useTranslation();
   const [editing, setEditing] = useState(false);
   const [draft, setDraft] = useState<Activity>(activity);
   const actType = activity.type || "attraction";
