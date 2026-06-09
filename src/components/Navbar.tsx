@@ -217,6 +217,19 @@ const Navbar = () => {
                   </Link>
                 </DropdownMenuItem>
                 <DropdownMenuSeparator />
+                <div className="flex flex-col items-center justify-center p-3 bg-muted/40 rounded-lg m-1.5 border border-border/50">
+                  <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest mb-2">{t('nav.developer')}</span>
+                  <div className="relative group">
+                    <div className="absolute -inset-0.5 bg-gradient-to-r from-primary to-accent rounded-full blur opacity-25 group-hover:opacity-50 transition duration-300"></div>
+                    <img
+                      src="/developer.jpg"
+                      alt="Md. Saiful Rehaman"
+                      className="relative h-14 w-14 rounded-full object-cover border border-border shadow-sm"
+                    />
+                  </div>
+                  <span className="mt-2 text-xs font-semibold text-foreground text-center">Md.Saiful Rehaman</span>
+                </div>
+                <DropdownMenuSeparator />
                 <DropdownMenuItem onClick={signOut} className="cursor-pointer gap-2 text-destructive focus:text-destructive">
                   <LogOut className="h-4 w-4" /> {t('nav.signout')}
                 </DropdownMenuItem>
@@ -329,18 +342,32 @@ const Navbar = () => {
                 </div>
               )}
               {!loading && user && (
-                <div className="mt-2 flex items-center justify-between rounded-lg bg-muted px-4 py-3">
-                  <div className="flex items-center gap-2">
-                    {avatarUrl ? (
-                      <img src={avatarUrl} alt={displayName} className="h-8 w-8 rounded-full object-cover" referrerPolicy="no-referrer" />
-                    ) : (
-                      <div className="flex h-8 w-8 items-center justify-center rounded-full bg-primary text-xs font-semibold text-primary-foreground">{initials}</div>
-                    )}
-                    <span className="text-sm font-medium text-foreground">{displayName}</span>
+                <div className="mt-2 flex flex-col gap-3 rounded-lg bg-muted px-4 py-3">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-2">
+                      {avatarUrl ? (
+                        <img src={avatarUrl} alt={displayName} className="h-8 w-8 rounded-full object-cover" referrerPolicy="no-referrer" />
+                      ) : (
+                        <div className="flex h-8 w-8 items-center justify-center rounded-full bg-primary text-xs font-semibold text-primary-foreground">{initials}</div>
+                      )}
+                      <span className="text-sm font-medium text-foreground">{displayName}</span>
+                    </div>
+                    <button onClick={() => { setOpen(false); signOut(); }} className="text-sm text-destructive">
+                      Sign Out
+                    </button>
                   </div>
-                  <button onClick={() => { setOpen(false); signOut(); }} className="text-sm text-destructive">
-                    Sign Out
-                  </button>
+                  <div className="flex flex-col items-center justify-center p-3 bg-background/50 border border-border/40 rounded-lg">
+                    <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest mb-2">{t('nav.developer')}</span>
+                    <div className="relative group">
+                      <div className="absolute -inset-0.5 bg-gradient-to-r from-primary to-accent rounded-full blur opacity-25 transition duration-300"></div>
+                      <img
+                        src="/developer.jpg"
+                        alt="Md. Saiful Rehaman"
+                        className="relative h-12 w-12 rounded-full object-cover border border-border shadow-sm"
+                      />
+                    </div>
+                    <span className="mt-2 text-xs font-semibold text-foreground text-center">Md.Saiful Rehaman</span>
+                  </div>
                 </div>
               )}
             </div>
