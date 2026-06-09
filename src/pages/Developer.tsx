@@ -32,7 +32,7 @@ const Developer = () => {
                 <img
                   src="/developer.jpg"
                   alt="Md. Saiful Rehaman"
-                  className="w-full h-full object-cover object-top scale-[1.7] origin-top translate-y-[8%]"
+                  className="w-full h-full object-cover object-[center_38%] scale-[1.75]"
                 />
               </div>
             </div>
