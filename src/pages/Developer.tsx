@@ -32,7 +32,7 @@ const Developer = () => {
                 <img
                   src="/developer.jpg"
                   alt="Md. Saiful Rehaman"
-                  className="w-full h-full object-cover object-[center_22%] scale-[1.45]"
+                  className="w-full h-full object-cover object-[center_27%] scale-[1.3]"
                 />
               </div>
             </div>
@@ -44,7 +44,7 @@ const Developer = () => {
             <h2 className="text-2xl font-bold font-display text-primary tracking-wide mb-1 group-hover:text-indigo-400 transition-colors duration-300">
               Md.Saiful Rehaman
             </h2>
-            
+
             {/* Roll number */}
             <p className="text-sm font-semibold text-foreground/80 font-mono tracking-wider mb-1">
               24211A05BH
