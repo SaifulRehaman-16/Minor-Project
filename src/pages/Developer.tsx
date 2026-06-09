@@ -28,11 +28,13 @@ const Developer = () => {
             <div className="relative">
               {/* Profile Image Border Glow */}
               <div className="absolute -inset-1 bg-gradient-to-r from-blue-500 via-indigo-500 to-purple-600 rounded-full blur opacity-45 group-hover:opacity-75 transition duration-300"></div>
-              <img
-                src="/developer.jpg"
-                alt="Md. Saiful Rehaman"
-                className="relative h-28 w-28 rounded-full object-cover border-4 border-card bg-card shadow-lg"
-              />
+              <div className="relative h-28 w-28 rounded-full overflow-hidden border-4 border-card bg-card shadow-lg flex items-center justify-center">
+                <img
+                  src="/developer.jpg"
+                  alt="Md. Saiful Rehaman"
+                  className="w-full h-full object-cover object-top scale-[1.7] origin-top translate-y-[8%]"
+                />
+              </div>
             </div>
           </div>
 
