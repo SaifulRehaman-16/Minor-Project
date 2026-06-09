@@ -15,6 +15,7 @@ import SharedItinerary from "@/pages/SharedItinerary";
 import Dashboard from "@/pages/Dashboard";
 import Profile from "@/pages/Profile";
 import DestinationDetail from "@/pages/DestinationDetail";
+import Developer from "@/pages/Developer";
 import NotFound from "@/pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -36,6 +37,7 @@ const App = () => (
           <Route path="/itinerary/:id" element={<SharedItinerary />} />
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/profile" element={<Profile />} />
+          <Route path="/developer" element={<Developer />} />
           <Route path="/destination/:id" element={<DestinationDetail />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
